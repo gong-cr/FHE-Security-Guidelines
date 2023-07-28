@@ -34,6 +34,7 @@ param_16384_ternary_classic_128 = LWE.Parameters(
     tag = "param_16384_ternary_classic_128"
 )
 
+#TODO: update param_16384_ternary_quantum_128 (121-bits)
 param_16384_ternary_quantum_128 = LWE.Parameters(
     n = 16384,
     q = 2**430,
@@ -258,6 +259,7 @@ param_32768_ternary_classic_256 = LWE.Parameters(
     tag = "param_32768_ternary_classic_256"
 )
 
+#TODO: update param_32768_ternary_quantum_256 (127-bits)
 param_32768_ternary_quantum_256 = LWE.Parameters(
     n = 32768,
     q = 2**443,
@@ -809,7 +811,7 @@ param_tfhe_630_binary_classic_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**17.9),
+    Xe = ND.DiscreteGaussian(2**49.9),
     m = oo,
     tag = "param_tfhe_630_binary_classic_128"
 )
@@ -818,7 +820,7 @@ param_tfhe_630_binary_quantum_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**18.9),
+    Xe = ND.DiscreteGaussian(2**50.9),
     m = oo,
     tag = "param_tfhe_630_binary_quantum_128"
 )
@@ -827,7 +829,7 @@ param_tfhe_630_ternary_classic_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**16.6),
+    Xe = ND.DiscreteGaussian(2**48.6),
     m = oo,
     tag = "param_tfhe_630_ternary_classic_128"
 )
@@ -836,29 +838,32 @@ param_tfhe_630_ternary_quantum_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**17.7),
+    Xe = ND.DiscreteGaussian(2**49.7),
     m = oo,
     tag = "param_tfhe_630_ternary_quantum_128"
 )
 
+#TODO: update
 param_tfhe_630_gaussian_classic_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.DiscreteGaussian(3.19),
-    Xe = ND.DiscreteGaussian(2**14.2),
+    Xe = ND.DiscreteGaussian(2**46.2),
     m = oo,
     tag = "param_tfhe_630_gaussian_classic_128"
 )
 
+#TODO: update
 param_tfhe_630_gaussian_quantum_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.DiscreteGaussian(3.19),
-    Xe = ND.DiscreteGaussian(2**17.9),
+    Xe = ND.DiscreteGaussian(2**47.3),
     m = oo,
     tag = "param_tfhe_630_gaussian_quantum_128"
 )
 
+#TODO: update
 param_tfhe_1024_binary_classic_128 = LWE.Parameters(
     n = 1024,
     q = 2**64,
@@ -877,6 +882,7 @@ param_tfhe_1024_binary_quantum_128 = LWE.Parameters(
     tag = "param_tfhe_1024_binary_quantum_128"
 )
 
+#TODO: update
 param_tfhe_1024_ternary_classic_128 = LWE.Parameters(
     n = 1024,
     q = 2**64,
@@ -904,6 +910,7 @@ param_tfhe_1024_gaussian_classic_128 = LWE.Parameters(
     tag = "param_tfhe_1024_gaussian_classic_128"
 )
 
+#TODO: update
 param_tfhe_1024_gaussian_quantum_128 = LWE.Parameters(
     n = 1024,
     q = 2**64,
@@ -931,6 +938,7 @@ param_tfhe_2048_binary_quantum_128 = LWE.Parameters(
     tag = "param_tfhe_2048_binary_quantum_128"
 )
 
+#TODO: update
 param_tfhe_2048_ternary_classic_128 = LWE.Parameters(
     n = 2048,
     q = 2**64,
@@ -940,6 +948,7 @@ param_tfhe_2048_ternary_classic_128 = LWE.Parameters(
     tag = "param_tfhe_2048_ternary_classic_128"
 )
 
+#TODO: update
 param_tfhe_2048_ternary_quantum_128 = LWE.Parameters(
     n = 2048,
     q = 2**64,
@@ -1049,9 +1058,16 @@ Table_4_7 = [(param_tfhe_630_binary_classic_128, 128, classic_model),
 all_params = Table_4_1 + Table_4_2 + Table_4_3 + Table_4_4 + Table_4_5 + Table_4_6 + Table_4_7
 
 for (param, security_level, model) in all_params:
-    usvp_level = LWE.primal_usvp(param, red_cost_model = model)
-    dual_level = LWE.dual_hybrid(param, red_cost_model = model)
-    estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
     print("parameters = {}".format(param.tag))
-    print("target security level = {}".format(security_level))
-    print("attained security level = {}".format(estimator_level))
+    try:
+        usvp_level = LWE.primal_usvp(param, red_cost_model = model)
+        dual_level = LWE.dual_hybrid(param, red_cost_model = model)
+        estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
+        if security_level > estimator_level:
+            print("target security level = {}".format(security_level))
+            print("attained security level = {}".format(estimator_level))
+        else:
+            print("pass.")
+    except Exception as e:
+        print(e)
+        print("fail.")
