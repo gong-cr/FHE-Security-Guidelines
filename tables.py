@@ -1,0 +1,833 @@
+import sys
+sys.path.insert(1, '../lattice-estimator')
+from estimator import *
+
+# Table 4.1
+
+param_8192_ternary_classic_128 = LWE.Parameters(
+    n = 8192,
+    q = 2**214,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_8192_ternary_quantum_128 = LWE.Parameters(
+    n = 8192,
+    q = 2**204,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary_classic_128 = LWE.Parameters(
+    n = 16384,
+    q = 2**431,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary_quantum_128 = LWE.Parameters(
+    n = 16384,
+    q = 2**430,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary_classic_128 = LWE.Parameters(
+    n = 32768,
+    q = 2**867,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary_quantum_128 = LWE.Parameters(
+    n = 32768,
+    q = 2**823,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary_classic_128 = LWE.Parameters(
+    n = 65536,
+    q = 2**1745,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary_quantum_128 = LWE.Parameters(
+    n = 65536,
+    q = 2**1656,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary_classic_128 = LWE.Parameters(
+    n = 131072,
+    q = 2**3515,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary_quantum_128 = LWE.Parameters(
+    n = 131072,
+    q = 2**3337,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+# Table 4.2
+
+param_8192_ternary_classic_192 = LWE.Parameters(
+    n = 8192,
+    q = 2**148,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_8192_ternary_quantum_192 = LWE.Parameters(
+    n = 8192,
+    q = 2**141,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary_classic_192 = LWE.Parameters(
+    n = 16384,
+    q = 2**297,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary_quantum_192 = LWE.Parameters(
+    n = 16384,
+    q = 2**283,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary_classic_192 = LWE.Parameters(
+    n = 32768,
+    q = 2**596,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary_quantum_192 = LWE.Parameters(
+    n = 32768,
+    q = 2**570,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary_classic_192 = LWE.Parameters(
+    n = 65536,
+    q = 2**1196,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary_quantum_192 = LWE.Parameters(
+    n = 65536,
+    q = 2**1143,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary_classic_192 = LWE.Parameters(
+    n = 131072,
+    q = 2**2400,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary_quantum_192 = LWE.Parameters(
+    n = 131072,
+    q = 2**2296,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+# Table 4.3
+
+param_8192_ternary_classic_256 = LWE.Parameters(
+    n = 8192,
+    q = 2**114,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_8192_ternary_quantum_256 = LWE.Parameters(
+    n = 8192,
+    q = 2**109,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary_classic_256 = LWE.Parameters(
+    n = 16384,
+    q = 2**230,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary_quantum_256 = LWE.Parameters(
+    n = 16384,
+    q = 2**220,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary_classic_256 = LWE.Parameters(
+    n = 32768,
+    q = 2**462,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary_quantum_256 = LWE.Parameters(
+    n = 32768,
+    q = 2**443,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary_classic_256 = LWE.Parameters(
+    n = 65536,
+    q = 2**927,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary_quantum_256 = LWE.Parameters(
+    n = 65536,
+    q = 2**887,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary_classic_256 = LWE.Parameters(
+    n = 131072,
+    q = 2**1865,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary_quantum_256 = LWE.Parameters(
+    n = 131072,
+    q = 2**1781,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+# Table 4.4
+
+param_16384_ternary128_classic_128 = LWE.Parameters(
+    n = 16384,
+    q = 2**361,
+    Xs = ND.SparseTernary(16384, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary128_quantum_128 = LWE.Parameters(
+    n = 16384,
+    q = 2**342,
+    Xs = ND.SparseTernary(16384, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary256_classic_128 = LWE.Parameters(
+    n = 16384,
+    q = 2**413,
+    Xs = ND.SparseTernary(16384, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary256_quantum_128 = LWE.Parameters(
+    n = 16384,
+    q = 2**387,
+    Xs = ND.SparseTernary(16384, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary128_classic_128 = LWE.Parameters(
+    n = 32768,
+    q = 2**718,
+    Xs = ND.SparseTernary(32768, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary128_quantum_128 = LWE.Parameters(
+    n = 32768,
+    q = 2**675,
+    Xs = ND.SparseTernary(32768, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary256_classic_128 = LWE.Parameters(
+    n = 32768,
+    q = 2**818,
+    Xs = ND.SparseTernary(32768, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary256_quantum_128 = LWE.Parameters(
+    n = 32768,
+    q = 2**768,
+    Xs = ND.SparseTernary(32768, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary128_classic_128 = LWE.Parameters(
+    n = 65536,
+    q = 2**1450,
+    Xs = ND.SparseTernary(65536, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary128_quantum_128 = LWE.Parameters(
+    n = 65536,
+    q = 2**1359,
+    Xs = ND.SparseTernary(65536, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary256_classic_128 = LWE.Parameters(
+    n = 65536,
+    q = 2**1637,
+    Xs = ND.SparseTernary(65536, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary256_quantum_128 = LWE.Parameters(
+    n = 65536,
+    q = 2**1537,
+    Xs = ND.SparseTernary(65536, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary128_classic_128 = LWE.Parameters(
+    n = 131072,
+    q = 2**2950,
+    Xs = ND.SparseTernary(131072, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary128_quantum_128 = LWE.Parameters(
+    n = 131072,
+    q = 2**2775,
+    Xs = ND.SparseTernary(131072, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary256_classic_128 = LWE.Parameters(
+    n = 131072,
+    q = 2**3325,
+    Xs = ND.SparseTernary(131072, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary256_quantum_128 = LWE.Parameters(
+    n = 131072,
+    q = 2**3112,
+    Xs = ND.SparseTernary(131072, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+# Table 4.5
+
+param_16384_ternary128_classic_192 = LWE.Parameters(
+    n = 16384,
+    q = 2**202,
+    Xs = ND.SparseTernary(16384, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary128_quantum_192 = LWE.Parameters(
+    n = 16384,
+    q = 2**190,
+    Xs = ND.SparseTernary(16384, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary256_classic_192 = LWE.Parameters(
+    n = 16384,
+    q = 2**270,
+    Xs = ND.SparseTernary(16384, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary256_quantum_192 = LWE.Parameters(
+    n = 16384,
+    q = 2**253,
+    Xs = ND.SparseTernary(16384, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary128_classic_192 = LWE.Parameters(
+    n = 32768,
+    q = 2**404,
+    Xs = ND.SparseTernary(32768, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary128_quantum_192 = LWE.Parameters(
+    n = 32768,
+    q = 2**377,
+    Xs = ND.SparseTernary(32768, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary256_classic_192 = LWE.Parameters(
+    n = 32768,
+    q = 2**531,
+    Xs = ND.SparseTernary(32768, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary256_quantum_192 = LWE.Parameters(
+    n = 32768,
+    q = 2**499,
+    Xs = ND.SparseTernary(32768, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary128_classic_192 = LWE.Parameters(
+    n = 65536,
+    q = 2**821,
+    Xs = ND.SparseTernary(65536, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary128_quantum_192 = LWE.Parameters(
+    n = 65536,
+    q = 2**768,
+    Xs = ND.SparseTernary(65536, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary256_classic_192 = LWE.Parameters(
+    n = 65536,
+    q = 2**1068,
+    Xs = ND.SparseTernary(65536, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary256_quantum_192 = LWE.Parameters(
+    n = 65536,
+    q = 2**1002,
+    Xs = ND.SparseTernary(65536, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary128_classic_192 = LWE.Parameters(
+    n = 131072,
+    q = 2**1700,
+    Xs = ND.SparseTernary(131072, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary128_quantum_192 = LWE.Parameters(
+    n = 131072,
+    q = 2**1575,
+    Xs = ND.SparseTernary(131072, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary256_classic_192 = LWE.Parameters(
+    n = 131072,
+    q = 2**2187,
+    Xs = ND.SparseTernary(131072, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary256_quantum_192 = LWE.Parameters(
+    n = 131072,
+    q = 2**2043,
+    Xs = ND.SparseTernary(131072, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+# Table 4.6
+
+param_16384_ternary128_classic_256 = LWE.Parameters(
+    n = 16384,
+    q = 2**125,
+    Xs = ND.SparseTernary(16384, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary128_quantum_256 = LWE.Parameters(
+    n = 16384,
+    q = 2**118,
+    Xs = ND.SparseTernary(16384, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary256_classic_256 = LWE.Parameters(
+    n = 16384,
+    q = 2**194,
+    Xs = ND.SparseTernary(16384, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_16384_ternary256_quantum_256 = LWE.Parameters(
+    n = 16384,
+    q = 2**182,
+    Xs = ND.SparseTernary(16384, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary128_classic_256 = LWE.Parameters(
+    n = 32768,
+    q = 2**245,
+    Xs = ND.SparseTernary(32768, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary128_quantum_256 = LWE.Parameters(
+    n = 32768,
+    q = 2**230,
+    Xs = ND.SparseTernary(32768, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary256_classic_256 = LWE.Parameters(
+    n = 32768,
+    q = 2**378,
+    Xs = ND.SparseTernary(32768, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_32768_ternary256_quantum_256 = LWE.Parameters(
+    n = 32768,
+    q = 2**354,
+    Xs = ND.SparseTernary(32768, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary128_classic_256 = LWE.Parameters(
+    n = 65536,
+    q = 2**493,
+    Xs = ND.SparseTernary(65536, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary128_quantum_256 = LWE.Parameters(
+    n = 65536,
+    q = 2**461,
+    Xs = ND.SparseTernary(65536, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary256_classic_256 = LWE.Parameters(
+    n = 65536,
+    q = 2**772,
+    Xs = ND.SparseTernary(65536, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_65536_ternary256_quantum_256 = LWE.Parameters(
+    n = 65536,
+    q = 2**721,
+    Xs = ND.SparseTernary(65536, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary128_classic_256 = LWE.Parameters(
+    n = 131072,
+    q = 2**1018,
+    Xs = ND.SparseTernary(131072, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary128_quantum_256 = LWE.Parameters(
+    n = 131072,
+    q = 2**951,
+    Xs = ND.SparseTernary(131072, 64, 64),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary256_classic_256 = LWE.Parameters(
+    n = 131072,
+    q = 2**1531,
+    Xs = ND.SparseTernary(131072, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+param_131072_ternary256_quantum_256 = LWE.Parameters(
+    n = 131072,
+    q = 2**1425,
+    Xs = ND.SparseTernary(131072, 128, 128),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo
+)
+
+# Table 4.7 (we ignore q = 2**32 as the relative error is the same)
+
+param_tfhe_630_binary_classic_128 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**17.9),
+    m = oo
+)
+
+param_tfhe_630_binary_quantum_128 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**18.9),
+    m = oo
+)
+
+param_tfhe_630_ternary_classic_128 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**16.6),
+    m = oo
+)
+
+param_tfhe_630_ternary_quantum_128 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**17.7),
+    m = oo
+)
+
+param_tfhe_630_ternary_classic_128 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(2**14.2),
+    Xe = ND.DiscreteGaussian(2**14.2),
+    m = oo
+)
+
+param_tfhe_630_ternary_quantum_128 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(2**15.3),
+    Xe = ND.DiscreteGaussian(2**17.9),
+    m = oo
+)
+
+param_tfhe_1024_binary_classic_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**39.5),
+    m = oo
+)
+
+param_tfhe_1024_binary_quantum_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**41.2),
+    m = oo
+)
+
+param_tfhe_1024_ternary_classic_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**38.3),
+    m = oo
+)
+
+param_tfhe_1024_ternary_quantum_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**40.0),
+    m = oo
+)
+
+param_tfhe_1024_gaussian_classic_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(2**36.1),
+    Xe = ND.DiscreteGaussian(2**36.1),
+    m = oo
+)
+
+param_tfhe_1024_gaussian_quantum_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(2**37.9),
+    Xe = ND.DiscreteGaussian(2**37.9),
+    m = oo
+)
+
+param_tfhe_2048_binary_classic_128 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**12.6),
+    m = oo
+)
+
+param_tfhe_2048_binary_quantum_128 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**16.0),
+    m = oo
+)
+
+param_tfhe_2048_ternary_classic_128 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**11.4),
+    m = oo
+)
+
+param_tfhe_2048_ternary_quantum_128 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**14.8),
+    m = oo
+)
+
+param_tfhe_2048_gaussian_classic_128 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(2**9.4),
+    Xe = ND.DiscreteGaussian(2**9.4),
+    m = oo
+)
+
+param_tfhe_2048_gaussian_quantum_128 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(2**12.7),
+    Xe = ND.DiscreteGaussian(2**12.7),
+    m = oo
+)
+
+param_tfhe_4096_binary_classic_128 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo
+)
+
+param_tfhe_4096_binary_quantum_128 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo
+)
+
+param_tfhe_4096_ternary_classic_128 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo
+)
+
+param_tfhe_4096_ternary_quantum_128 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo
+)
+
+param_tfhe_4096_gaussian_classic_128 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(2**2.0),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo
+)
+
+param_tfhe_4096_gaussian_quantum_128 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(2**2.0),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo
+)
