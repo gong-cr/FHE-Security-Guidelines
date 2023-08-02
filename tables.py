@@ -1055,6 +1055,8 @@ Table_4_7 = [(param_tfhe_630_binary_classic_128, 128, classic_model),
              (param_tfhe_4096_gaussian_classic_128, 128, classic_model),
              (param_tfhe_4096_gaussian_quantum_128, 128, quantum_model)]
 
+# Table 4.9
+
 param_functional_16384_classic_128 = LWE.Parameters(
     n = 16384,
     q = 2**424,
@@ -1239,6 +1241,8 @@ Table_4_8 = [
     (param_functional_65536_quantum_256, 256, quantum_model)
 ]
 
+# Table 4.9
+
 param_functional_tfhe_742_binary_classic_128 = LWE.Parameters(
     n = 742,
     q = 2**64,
@@ -1282,6 +1286,8 @@ Table_4_9 = [
     (param_functional_tfhe_1536_binary_classic_128, 128, classic_model)
 ]
 
+#Table 4.10
+
 param_functional_131072_ternary128_classic_128 = LWE.Parameters(
     n = 131072,
     q = 2**2292,
@@ -1304,6 +1310,8 @@ Table_4_10 = [
     (param_functional_131072_ternary128_classic_128, 128, classic_model),
     (param_functional_131072_ternary64_classic_128, 128, quantum_model)
 ]
+
+# Table 4.11
 
 param_functional_32768_ternary21845_classic_128 = LWE.Parameters(
     n = 32768,
