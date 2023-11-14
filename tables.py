@@ -1,6 +1,7 @@
 import sys
 sys.path.insert(1, '../lattice-estimator')
 from estimator import *
+from sage import *
 
 classic_model = RC.BDGL16
 quantum_model = RC.LaaMosPol14
@@ -1323,8 +1324,8 @@ param_functional_32768_ternary21845_classic_128 = LWE.Parameters(
 )
 
 param_functional_65536_ternary8192_classic_192 = LWE.Parameters(
-    n = 32768,
-    q = 2**899,
+    n = 65536,
+    q = 2**1206,
     Xs = ND.SparseTernary(65536, 4096, 4096),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -1332,8 +1333,8 @@ param_functional_65536_ternary8192_classic_192 = LWE.Parameters(
 )
 
 param_functional_65536_ternary8192_classic_256 = LWE.Parameters(
-    n = 32768,
-    q = 2**674,
+    n = 65536,
+    q = 2**918,
     Xs = ND.SparseTernary(65536, 4096, 4096),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -1342,7 +1343,7 @@ param_functional_65536_ternary8192_classic_256 = LWE.Parameters(
 
 param_functional_32768_ternary21845_quantum_128 = LWE.Parameters(
     n = 32768,
-    q = 2**571,
+    q = 2**825,
     Xs = ND.SparseTernary(32768, 10922, 10923),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -1350,8 +1351,8 @@ param_functional_32768_ternary21845_quantum_128 = LWE.Parameters(
 )
 
 param_functional_65536_ternary8192_quantum_192 = LWE.Parameters(
-    n = 32768,
-    q = 2**862,
+    n = 65536,
+    q = 2**1139,
     Xs = ND.SparseTernary(65536, 4096, 4096),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -1359,8 +1360,8 @@ param_functional_65536_ternary8192_quantum_192 = LWE.Parameters(
 )
 
 param_functional_65536_ternary8192_quantum_256 = LWE.Parameters(
-    n = 32768,
-    q = 2**622,
+    n = 65536,
+    q = 2**866,
     Xs = ND.SparseTernary(65536, 4096, 4096),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -1381,14 +1382,14 @@ all_functional_params = Table_4_8 + Table_4_9 + Table_4_10 + Table_4_11
 all_params = all_security_params + all_functional_params
 
 
-
 for (param, security_level, model) in all_params:
     print("parameters = {}".format(param.tag))
     params_to_update = []
     try:
-        usvp_level = LWE.primal_usvp(param, red_cost_model = model)
-        dual_level = LWE.dual_hybrid(param, red_cost_model = model)
-        estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
+        #usvp_level = LWE.primal_usvp(param, red_cost_model = model)
+        #dual_level = LWE.dual_hybrid(param, red_cost_model = model)
+        #estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
+        est = LWE.estimate(param, red_cost_model = model)
         if security_level > estimator_level:
             print("target security level = {}".format(security_level))
             print("attained security level = {}".format(estimator_level))
