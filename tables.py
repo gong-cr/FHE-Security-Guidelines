@@ -446,10 +446,6 @@ Table_5_1_c = [(param_2048_ternary_classic_256, 256, classic_model),
              (param_131072_ternary_quantum_256, 256, quantum_model)]
 
 
-
-
-
-
 # Table 5.1 - 128-bit security, gaussian secret
 
 param_2048_gaussian_classic_128 = LWE.Parameters(
@@ -503,7 +499,7 @@ param_8192_gaussian_quantum_128 = LWE.Parameters(
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_8192_ternary_quantum_128"
+    tag = "param_8192_gaussian_quantum_128"
 )
 
 param_16384_gaussian_classic_128 = LWE.Parameters(
@@ -512,7 +508,7 @@ param_16384_gaussian_classic_128 = LWE.Parameters(
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_16384_ternary_classic_128"
+    tag = "param_16384_gaussian_classic_128"
 )
 
 param_16384_gaussian_quantum_128 = LWE.Parameters(
@@ -521,7 +517,7 @@ param_16384_gaussian_quantum_128 = LWE.Parameters(
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_16384_ternary_quantum_128"
+    tag = "param_16384_gaussian_quantum_128"
 )
 
 param_32768_gaussian_classic_128 = LWE.Parameters(
@@ -530,7 +526,7 @@ param_32768_gaussian_classic_128 = LWE.Parameters(
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_32768_ternary_classic_128"
+    tag = "param_32768_gaussian_classic_128"
 )
 
 param_32768_gaussian_quantum_128 = LWE.Parameters(
@@ -539,7 +535,7 @@ param_32768_gaussian_quantum_128 = LWE.Parameters(
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_32768_ternary_quantum_128"
+    tag = "param_32768_gaussian_quantum_128"
 )
 
 param_65536_gaussian_classic_128 = LWE.Parameters(
@@ -548,7 +544,7 @@ param_65536_gaussian_classic_128 = LWE.Parameters(
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_65536_ternary_classic_128"
+    tag = "param_65536_gaussian_classic_128"
 )
 
 param_65536_gaussian_quantum_128 = LWE.Parameters(
@@ -557,7 +553,7 @@ param_65536_gaussian_quantum_128 = LWE.Parameters(
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_65536_ternary_quantum_128"
+    tag = "param_65536_gaussian_quantum_128"
 )
 
 param_131072_gaussian_classic_128 = LWE.Parameters(
@@ -566,7 +562,7 @@ param_131072_gaussian_classic_128 = LWE.Parameters(
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_131072_ternary_classic_128"
+    tag = "param_131072_gaussian_classic_128"
 )
 
 param_131072_gaussian_quantum_128 = LWE.Parameters(
@@ -575,7 +571,7 @@ param_131072_gaussian_quantum_128 = LWE.Parameters(
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_131072_ternary_quantum_128"
+    tag = "param_131072_gaussian_quantum_128"
 )
 
 Table_5_1_d = [(param_2048_gaussian_classic_128, 128, classic_model),
@@ -593,8 +589,148 @@ Table_5_1_d = [(param_2048_gaussian_classic_128, 128, classic_model),
              (param_131072_gaussian_classic_128, 128, classic_model),
              (param_131072_gaussian_quantum_128, 128, quantum_model)] 
 
+# Table 5.1 - 192-bit security, gaussian secret
 
+param_2048_gaussian_classic_192 = LWE.Parameters(
+    n = 2048,
+    q = 2**37, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_2048_gaussian_classic_192"
+)
 
+param_2048_gaussian_quantum_192 = LWE.Parameters(
+    n = 2048,
+    q = 2**35,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_2048_gaussian_quantum_192"
+)
+
+param_4096_gaussian_classic_192 = LWE.Parameters(
+    n = 4096,
+    q = 2**75, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_4096_gaussian_classic_192"
+)
+
+param_4096_gaussian_quantum_192 = LWE.Parameters(
+    n = 8192,
+    q = 2**70,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_4096_gaussian_quantum_192"
+)
+
+param_8192_gaussian_classic_192 = LWE.Parameters(
+    n = 8192,
+    q = 2**151, #2**148,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_8192_gaussian_classic_192"
+)
+
+param_8192_gaussian_quantum_192 = LWE.Parameters(
+    n = 8192,
+    q = 2**141,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_8192_gaussian_quantum_192"
+)
+
+param_16384_gaussian_classic_192 = LWE.Parameters(
+    n = 16384,
+    q = 2**304,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_16384_gaussian_classic_192"
+)
+
+param_16384_gaussian_quantum_192 = LWE.Parameters(
+    n = 16384,
+    q = 2**284, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_16384_gaussian_quantum_192"
+)
+
+param_32768_gaussian_classic_192 = LWE.Parameters(
+    n = 32768,
+    q = 2**610, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_32768_gaussian_classic_192"
+)
+
+param_32768_gaussian_quantum_192 = LWE.Parameters(
+    n = 32768,
+    q = 2**569, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_32768_gaussian_quantum_192"
+)
+
+param_65536_gaussian_classic_192 = LWE.Parameters(
+    n = 65536,
+    q = 2**1225,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_65536_gaussian_classic_192"
+)
+
+param_65536_gaussian_quantum_192 = LWE.Parameters(
+    n = 65536,
+    q = 2**1143,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_65536_gaussian_quantum_192"
+)
+
+param_131072_gaussian_classic_192 = LWE.Parameters(
+    n = 131072,
+    q = 2**2462, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_131072_gaussian_classic_192"
+)
+
+param_131072_gaussian_quantum_192 = LWE.Parameters(
+    n = 131072,
+    q = 2**2300, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_131072_gaussian_quantum_192"
+)
+
+Table_5_1_b = [(param_2048_gaussian_classic_192, 192, classic_model),
+             (param_2048_gaussian_quantum_192, 192, quantum_model),
+             (param_4096_gaussian_classic_192, 192, classic_model),
+             (param_4096_gaussian_quantum_192, 192, quantum_model),
+             (param_8192_gaussian_classic_192, 192, classic_model),
+             (param_8192_gaussian_quantum_192, 192, quantum_model),
+             (param_16384_gaussian_classic_192, 192, classic_model),
+             (param_16384_gaussian_quantum_192, 192, quantum_model),
+             (param_32768_gaussian_classic_192, 192, classic_model),
+             (param_32768_gaussian_quantum_192, 192, quantum_model),
+             (param_65536_gaussian_classic_192, 192, classic_model),
+             (param_65536_gaussian_quantum_192, 192, quantum_model),
+             (param_131072_gaussian_classic_192, 192, classic_model),
+             (param_131072_gaussian_quantum_192, 192, quantum_model)]
 
 
 
