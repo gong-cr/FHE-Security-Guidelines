@@ -717,7 +717,7 @@ param_131072_gaussian_quantum_192 = LWE.Parameters(
     tag = "param_131072_gaussian_quantum_192"
 )
 
-Table_5_1_b = [(param_2048_gaussian_classic_192, 192, classic_model),
+Table_5_1_e = [(param_2048_gaussian_classic_192, 192, classic_model),
              (param_2048_gaussian_quantum_192, 192, quantum_model),
              (param_4096_gaussian_classic_192, 192, classic_model),
              (param_4096_gaussian_quantum_192, 192, quantum_model),
@@ -736,18 +736,150 @@ Table_5_1_b = [(param_2048_gaussian_classic_192, 192, classic_model),
 
 
 
+# Table 5.1 - 256-bit security, gaussian secret
 
+param_2048_gaussian_classic_256 = LWE.Parameters(
+    n = 2048,
+    q = 2**31,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_2048_gaussian_classic_256"
+)
 
+param_2048_gaussian_quantum_256 = LWE.Parameters(
+    n = 2048,
+    q = 2**29,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_2048_gaussian_quantum_256"
+)
 
+param_4096_gaussian_classic_256 = LWE.Parameters(
+    n = 4096,
+    q = 2**60, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_4096_gaussian_classic_256"
+)
 
+param_4096_gaussian_quantum_256 = LWE.Parameters(
+    n = 4096,
+    q = 2**56, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_4096_gaussian_quantum_256"
+)
 
+param_8192_gaussian_classic_256 = LWE.Parameters(
+    n = 8192,
+    q = 2**120,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_8192_gaussian_classic_256"
+)
 
+param_8192_gaussian_quantum_256 = LWE.Parameters(
+    n = 8192,
+    q = 2**111, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_8192_gaussian_quantum_256"
+)
 
+param_16384_gaussian_classic_256 = LWE.Parameters(
+    n = 16384,
+    q = 2**239,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_16384_gaussian_classic_256"
+)
 
+param_16384_gaussian_quantum_256 = LWE.Parameters(
+    n = 16384,
+    q = 2**222,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_16384_gaussian_quantum_256"
+)
 
+param_32768_gaussian_classic_256 = LWE.Parameters(
+    n = 32768,
+    q = 2**478,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_32768_gaussian_classic_256"
+)
 
+param_32768_gaussian_quantum_256 = LWE.Parameters(
+    n = 32768,
+    q = 2**445,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_32768_gaussian_quantum_256"
+)
 
+param_65536_gaussian_classic_256 = LWE.Parameters(
+    n = 65536,
+    q = 2**957, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_65536_gaussian_classic_256"
+)
 
+param_65536_gaussian_quantum_256 = LWE.Parameters(
+    n = 65536,
+    q = 2**891,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_65536_gaussian_quantum_256"
+)
+
+param_131072_gaussian_classic_256 = LWE.Parameters(
+    n = 131072,
+    # looks wrong
+    q = 2**1784, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_131072_gaussian_classic_256"
+)
+
+param_131072_gaussian_quantum_256 = LWE.Parameters(
+    n = 131072,
+    # looks wrong
+    q = 2**1786,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_131072_gaussian_quantum_256"
+)
+
+Table_5_1_c = [(param_2048_gaussian_classic_256, 256, classic_model),
+             (param_2048_gaussian_quantum_256, 256, quantum_model),
+             (param_4096_gaussian_classic_256, 256, classic_model),
+             (param_4096_gaussian_quantum_256, 256, quantum_model),
+             (param_8192_gaussian_classic_256, 256, classic_model),
+             (param_8192_gaussian_quantum_256, 256, quantum_model),
+             (param_16384_gaussian_classic_256, 256, classic_model),
+             (param_16384_gaussian_quantum_256, 256, quantum_model),
+             (param_32768_gaussian_classic_256, 256, classic_model),
+             (param_32768_gaussian_quantum_256, 256, quantum_model),
+             (param_65536_gaussian_classic_256, 256, classic_model),
+             (param_65536_gaussian_quantum_256, 256, quantum_model),
+             (param_131072_gaussian_classic_256, 256, classic_model),
+             (param_131072_gaussian_quantum_256, 256, quantum_model)]
 
 
 # Table 4.7 (we ignore q = 2**32 as the relative error is the same)
