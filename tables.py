@@ -733,9 +733,6 @@ Table_5_1_e = [(param_2048_gaussian_classic_192, 192, classic_model),
              (param_131072_gaussian_quantum_192, 192, quantum_model)]
 
 
-
-
-
 # Table 5.1 - 256-bit security, gaussian secret
 
 param_2048_gaussian_classic_256 = LWE.Parameters(
@@ -866,7 +863,7 @@ param_131072_gaussian_quantum_256 = LWE.Parameters(
     tag = "param_131072_gaussian_quantum_256"
 )
 
-Table_5_1_c = [(param_2048_gaussian_classic_256, 256, classic_model),
+Table_5_1_f = [(param_2048_gaussian_classic_256, 256, classic_model),
              (param_2048_gaussian_quantum_256, 256, quantum_model),
              (param_4096_gaussian_classic_256, 256, classic_model),
              (param_4096_gaussian_quantum_256, 256, quantum_model),
@@ -1135,13 +1132,10 @@ Table_5_2 = [(param_tfhe_630_binary_classic_128, 128, classic_model),
 
 Table_5_3 = []
 
-Table 5_4 = []
+Table_5_4 = []
 
-all_security_params = Table_4_1 + Table_4_2 + Table_4_3 + Table_4_4 + Table_4_5 + Table_4_6 + Table_4_7
+all_security_params = Table_5_1_a + Table_5_1_b + Table_5_1_c + Table_5_1_d + Table_5_1_e + Table_5_1_f + Table_5_2 + Table_5_3 + Table_5_4
 # we can cross-check functional params by eye from the maxQ / maxSD table
-all_functional_params = Table_4_8 + Table_4_9 + Table_4_10 + Table_4_11
-all_params = all_security_params #+ all_functional_params
-
 # add functionality to turn off print
 for (param, security_level, model) in all_params:
     print("parameters = {}".format(param.tag))
