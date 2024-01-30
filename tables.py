@@ -1137,20 +1137,20 @@ Table_5_4 = []
 all_security_params = Table_5_1_a + Table_5_1_b + Table_5_1_c + Table_5_1_d + Table_5_1_e + Table_5_1_f + Table_5_2 + Table_5_3 + Table_5_4
 # we can cross-check functional params by eye from the maxQ / maxSD table
 # add functionality to turn off print
-for (param, security_level, model) in all_params:
+for (param, security_level, model) in all_security_params:
     print("parameters = {}".format(param.tag))
-    print(param_tfhe_1024_ternary_classic_128.tag)
+    # print(param_tfhe_1024_ternary_classic_128.tag)
     params_to_update = []
     try:
         #usvp_level = LWE.primal_usvp(param, red_cost_model = model)
         #dual_level = LWE.dual_hybrid(param, red_cost_model = model)
         #estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
         # hybrid-decoding
-        if param.n <= 16384: 
-            est = LWE.estimate(param_tfhe_1024_ternary_classic_128, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd"))
+        if param.n == 16384*2: 
+            est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd"))
         else: 
             # check function name
-            est = LWE.estimate(param_tfhe_1024_ternary_classic_128, red_cost_model = model, deny_list = ("arora-gb", "bkw", "primal_hybrid", "bdd"))
+            est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "primal_hybrid", "bdd"))
         
         costs = []
         for key in est.keys():
