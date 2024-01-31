@@ -26,7 +26,7 @@ param_2048_ternary_classic_128 = LWE.Parameters(
 )
 
 param_2048_ternary_quantum_128 = LWE.Parameters(
-    n = 8192,
+    n = 2048,
     q = 2**50,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
@@ -1143,7 +1143,7 @@ all_security_params = Table_5_1_a + Table_5_1_b + Table_5_1_c + Table_5_1_d + Ta
 with open(output_file, "w") as file, open(params_update_file, "w") as update_file, open(level_diff_file, "w") as diff_file:
     for (param, security_level, model) in all_security_params:
         file.write("parameters = {}\n".format(param.tag))
-        # # print(param_tfhe_1024_ternary_classic_128.tag)
+        print("parameters = {}".format(param.tag))
         # params_to_update = []
         try:
             #usvp_level = LWE.primal_usvp(param, red_cost_model = model)
@@ -1157,13 +1157,18 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
                 est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "primal_hybrid", "bdd"))
             file.write("{}\n".format(est))
             costs = []
+            costs_no_bdd_hybrid = [] #bdd
             for key in est.keys():
-                costs.append(est[key]["rop"])
+                cost = est[key]["rop"]
+                costs.append(cost)
+                if key != "bdd_hybrid":  # Exclude 'bdd_hybrid' cost #bdd
+                    costs_no_bdd_hybrid.append(cost) #bdd
             estimator_level = log(min(costs),2)
 
             if param.n <= 16384: 
                 bdd_hybrid_level = log(est["bdd_hybrid"]["rop"],2)
-                diff_file.write("{}, {}, {}\n".format(estimator_level - bdd_hybrid_level, estimator_level, bdd_hybrid_level))
+                estimator_level_no_bdd_hybrid = log(min(costs_no_bdd_hybrid), 2)
+                diff_file.write("{}, {}, {}, {}\n".format(param.n, estimator_level_no_bdd_hybrid - bdd_hybrid_level, estimator_level_no_bdd_hybrid, bdd_hybrid_level))
             if security_level > estimator_level:
                 file.write("target security level = {}\n".format(security_level))
                 file.write("attained security level = {}\n".format(estimator_level))
