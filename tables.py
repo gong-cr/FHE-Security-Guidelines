@@ -1136,10 +1136,11 @@ Table_5_4 = []
 
 output_file = "record.txt"
 params_update_file = "params_to_update.txt"
+level_diff_file = "bdd_hyrbid_diff.txt"
 all_security_params = Table_5_1_a + Table_5_1_b + Table_5_1_c + Table_5_1_d + Table_5_1_e + Table_5_1_f + Table_5_2 + Table_5_3 + Table_5_4
 # we can cross-check functional params by eye from the maxQ / minSD table
 # add functionality to turn off print
-with open(output_file, "w") as file, open(params_update_file, "w") as update_file:
+with open(output_file, "w") as file, open(params_update_file, "w") as update_file, open(level_diff_file, "w") as diff_file:
     for (param, security_level, model) in all_security_params:
         file.write("parameters = {}\n".format(param.tag))
         # # print(param_tfhe_1024_ternary_classic_128.tag)
@@ -1149,17 +1150,20 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
             #dual_level = LWE.dual_hybrid(param, red_cost_model = model)
             #estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
             # hybrid-decoding
-            if param.n == 16384*2: 
+            if param.n <= 16384: #param.n == 16384*2
                 est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd"))
             else: 
                 # check function name
                 est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "primal_hybrid", "bdd"))
-            
+            file.write("{}\n".format(est))
             costs = []
             for key in est.keys():
                 costs.append(est[key]["rop"])
             estimator_level = log(min(costs),2)
-            
+
+            if param.n <= 16384: 
+                bdd_hybrid_level = log(est["bdd_hybrid"]["rop"],2)
+                diff_file.write("{}, {}, {}\n".format(estimator_level - bdd_hybrid_level, estimator_level, bdd_hybrid_level))
             if security_level > estimator_level:
                 file.write("target security level = {}\n".format(security_level))
                 file.write("attained security level = {}\n".format(estimator_level))
@@ -1169,5 +1173,9 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
         except Exception as e:
             file.write("{}\n".format(e))
             file.write("fail.\n")
+        file.flush()
+        update_file.flush()
+        diff_file.flush()
 
-file.write("Parameters to update: {}\n".format(params_to_update))
+print("COMPLETE")
+# file.write("Parameters to update: {}\n".format(params_to_update))
