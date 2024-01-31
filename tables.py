@@ -1134,37 +1134,40 @@ Table_5_3 = []
 
 Table_5_4 = []
 
+output_file = "record.txt"
+params_update_file = "params_to_update.txt"
 all_security_params = Table_5_1_a + Table_5_1_b + Table_5_1_c + Table_5_1_d + Table_5_1_e + Table_5_1_f + Table_5_2 + Table_5_3 + Table_5_4
-# we can cross-check functional params by eye from the maxQ / maxSD table
+# we can cross-check functional params by eye from the maxQ / minSD table
 # add functionality to turn off print
-for (param, security_level, model) in all_security_params:
-    print("parameters = {}".format(param.tag))
-    # print(param_tfhe_1024_ternary_classic_128.tag)
-    params_to_update = []
-    try:
-        #usvp_level = LWE.primal_usvp(param, red_cost_model = model)
-        #dual_level = LWE.dual_hybrid(param, red_cost_model = model)
-        #estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
-        # hybrid-decoding
-        if param.n == 16384*2: 
-            est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd"))
-        else: 
-            # check function name
-            est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "primal_hybrid", "bdd"))
-        
-        costs = []
-        for key in est.keys():
-            costs.append(est[key]["rop"])
-        estimator_level = log(min(costs),2)
-        
-        if security_level > estimator_level:
-            print("target security level = {}".format(security_level))
-            print("attained security level = {}".format(estimator_level))
-            params_to_update.append(param)
-        else:
-            print("pass.")
-    except Exception as e:
-        print(e)
-        print("fail.")
+with open(output_file, "w") as file, open(params_update_file, "w") as update_file:
+    for (param, security_level, model) in all_security_params:
+        file.write("parameters = {}\n".format(param.tag))
+        # # print(param_tfhe_1024_ternary_classic_128.tag)
+        # params_to_update = []
+        try:
+            #usvp_level = LWE.primal_usvp(param, red_cost_model = model)
+            #dual_level = LWE.dual_hybrid(param, red_cost_model = model)
+            #estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
+            # hybrid-decoding
+            if param.n == 16384*2: 
+                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd"))
+            else: 
+                # check function name
+                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "primal_hybrid", "bdd"))
+            
+            costs = []
+            for key in est.keys():
+                costs.append(est[key]["rop"])
+            estimator_level = log(min(costs),2)
+            
+            if security_level > estimator_level:
+                file.write("target security level = {}\n".format(security_level))
+                file.write("attained security level = {}\n".format(estimator_level))
+                update_file.write("{}\n".format(param.tag))
+            else:
+                file.write("pass.\n")
+        except Exception as e:
+            file.write("{}\n".format(e))
+            file.write("fail.\n")
 
-print(params_to_update)
+file.write("Parameters to update: {}\n".format(params_to_update))
