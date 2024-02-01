@@ -188,7 +188,7 @@ param_4096_ternary_classic_192 = LWE.Parameters(
 )
 
 param_4096_ternary_quantum_192 = LWE.Parameters(
-    n = 8192,
+    n = 4096,
     q = 2**70,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
@@ -458,7 +458,7 @@ param_2048_gaussian_classic_128 = LWE.Parameters(
 )
 
 param_2048_gaussian_quantum_128 = LWE.Parameters(
-    n = 8192,
+    n = 2048,
     q = 2**53,
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
@@ -619,7 +619,7 @@ param_4096_gaussian_classic_192 = LWE.Parameters(
 )
 
 param_4096_gaussian_quantum_192 = LWE.Parameters(
-    n = 8192,
+    n = 4096,
     q = 2**72,#70
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
@@ -1154,7 +1154,7 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
                 est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd"))
             else: 
                 # check function name
-                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "primal_hybrid", "bdd"))
+                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd", "bdd_mitm_hybrid", "bdd_hybrid"))
             file.write("{}\n".format(est))
             costs = []
             costs_no_bdd_hybrid = [] #bdd
