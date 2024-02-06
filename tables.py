@@ -1152,7 +1152,7 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
             #dual_level = LWE.dual_hybrid(param, red_cost_model = model)
             #estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
             # hybrid-decoding
-            if param.n <= 16384: #param.n == 16384*2
+            if param.n <= 2*16384: #param.n == 16384*2
                 est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd"))
             else: 
                 # check function name
@@ -1170,11 +1170,11 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
             if param.n < 2*16384: 
                 bdd_hybrid_level = log(est["bdd_hybrid"]["rop"],2)
                 estimator_level_no_bdd_hybrid = log(min(costs_no_bdd_hybrid), 2)
-                diff_file.write("{}, {}, {}, {}, {}\n".format(param.n, estimator_level_no_bdd_hybrid - bdd_hybrid_level, estimator_level_no_bdd_hybrid, bdd_hybrid_level, param.tag))
+                diff_file.write("{}, {}, {}, {}, {}, {}\n".format(param.n, estimator_level_no_bdd_hybrid - bdd_hybrid_level, estimator_level_no_bdd_hybrid, bdd_hybrid_level, param.tag, estimator_level))
             if security_level > estimator_level:
                 file.write("target security level = {}\n".format(security_level))
                 file.write("attained security level = {}\n".format(estimator_level))
-                update_file.write("{}\n".format(param.tag))
+                update_file.write("{},{}\n".format(param.tag, estimator_level))
             else:
                 file.write("pass.\n")
         except Exception as e:
