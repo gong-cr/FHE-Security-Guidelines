@@ -1142,6 +1142,8 @@ all_security_params = Table_5_1_a + Table_5_1_b + Table_5_1_c + Table_5_1_d + Ta
 # add functionality to turn off print
 with open(output_file, "w") as file, open(params_update_file, "w") as update_file, open(level_diff_file, "w") as diff_file:
     for (param, security_level, model) in all_security_params:
+        # if param.n != 16384*2:#delete
+        #     continue #delete
         file.write("parameters = {}\n".format(param.tag))
         print("parameters = {}".format(param.tag))
         # params_to_update = []
@@ -1165,10 +1167,10 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
                     costs_no_bdd_hybrid.append(cost) #bdd
             estimator_level = log(min(costs),2)
 
-            if param.n <= 16384: 
+            if param.n < 2*16384: 
                 bdd_hybrid_level = log(est["bdd_hybrid"]["rop"],2)
                 estimator_level_no_bdd_hybrid = log(min(costs_no_bdd_hybrid), 2)
-                diff_file.write("{}, {}, {}, {}\n".format(param.n, estimator_level_no_bdd_hybrid - bdd_hybrid_level, estimator_level_no_bdd_hybrid, bdd_hybrid_level))
+                diff_file.write("{}, {}, {}, {}, {}\n".format(param.n, estimator_level_no_bdd_hybrid - bdd_hybrid_level, estimator_level_no_bdd_hybrid, bdd_hybrid_level, param.tag))
             if security_level > estimator_level:
                 file.write("target security level = {}\n".format(security_level))
                 file.write("attained security level = {}\n".format(estimator_level))
