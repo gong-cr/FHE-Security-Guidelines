@@ -54,7 +54,7 @@ param_4096_ternary_quantum_128 = LWE.Parameters(
 
 param_8192_ternary_classic_128 = LWE.Parameters(
     n = 8192,
-    q = 2**218, #2**214,
+    q = 2**217, #2**214,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -63,7 +63,7 @@ param_8192_ternary_classic_128 = LWE.Parameters(
 
 param_8192_ternary_quantum_128 = LWE.Parameters(
     n = 8192,
-    q = 2**204,
+    q = 2**203,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -82,7 +82,7 @@ param_16384_ternary_classic_128 = LWE.Parameters(
 #TODO: update param_16384_ternary_quantum_128 (121-bits)
 param_16384_ternary_quantum_128 = LWE.Parameters(
     n = 16384,
-    q = 2**410, # 409 2**410,
+    q = 2**409, # 409 2**410,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -171,7 +171,7 @@ param_2048_ternary_classic_192 = LWE.Parameters(
 
 param_2048_ternary_quantum_192 = LWE.Parameters(
     n = 2048,
-    q = 2**35,
+    q = 2**34,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -225,7 +225,7 @@ param_16384_ternary_classic_192 = LWE.Parameters(
 
 param_16384_ternary_quantum_192 = LWE.Parameters(
     n = 16384,
-    q = 2**284, #2**283,
+    q = 2**283, #2**283,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -459,7 +459,7 @@ param_2048_gaussian_classic_128 = LWE.Parameters(
 
 param_2048_gaussian_quantum_128 = LWE.Parameters(
     n = 2048,
-    q = 2**53,
+    q = 2**52,
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -486,7 +486,7 @@ param_4096_gaussian_quantum_128 = LWE.Parameters(
 
 param_8192_gaussian_classic_128 = LWE.Parameters(
     n = 8192,
-    q = 2**220, 
+    q = 2**219, 
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -495,7 +495,7 @@ param_8192_gaussian_classic_128 = LWE.Parameters(
 
 param_8192_gaussian_quantum_128 = LWE.Parameters(
     n = 8192,
-    q = 2**206,
+    q = 2**205,
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -504,7 +504,7 @@ param_8192_gaussian_quantum_128 = LWE.Parameters(
 
 param_16384_gaussian_classic_128 = LWE.Parameters(
     n = 16384,
-    q = 2**440,
+    q = 2**439,
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -513,7 +513,7 @@ param_16384_gaussian_classic_128 = LWE.Parameters(
 
 param_16384_gaussian_quantum_128 = LWE.Parameters(
     n = 16384,
-    q = 2**412, 
+    q = 2**411, 
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -602,7 +602,7 @@ param_2048_gaussian_classic_192 = LWE.Parameters(
 
 param_2048_gaussian_quantum_192 = LWE.Parameters(
     n = 2048,
-    q = 2**37,
+    q = 2**36,
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -737,7 +737,7 @@ Table_5_1_e = [(param_2048_gaussian_classic_192, 192, classic_model),
 
 param_2048_gaussian_classic_256 = LWE.Parameters(
     n = 2048,
-    q = 2**31,
+    q = 2**30,
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -746,7 +746,7 @@ param_2048_gaussian_classic_256 = LWE.Parameters(
 
 param_2048_gaussian_quantum_256 = LWE.Parameters(
     n = 2048,
-    q = 2**29,
+    q = 2**28,
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -1152,7 +1152,7 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
             #dual_level = LWE.dual_hybrid(param, red_cost_model = model)
             #estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
             # hybrid-decoding
-            if param.n <= 2*16384: #param.n == 16384*2
+            if param.n <= 16384: #param.n == 16384*2
                 est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd"))
             else: 
                 # check function name
@@ -1167,7 +1167,7 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
                     costs_no_bdd_hybrid.append(cost) #bdd
             estimator_level = log(min(costs),2)
 
-            if param.n < 2*16384: 
+            if param.n <= 16384: 
                 bdd_hybrid_level = log(est["bdd_hybrid"]["rop"],2)
                 estimator_level_no_bdd_hybrid = log(min(costs_no_bdd_hybrid), 2)
                 diff_file.write("{}, {}, {}, {}, {}, {}\n".format(param.n, estimator_level_no_bdd_hybrid - bdd_hybrid_level, estimator_level_no_bdd_hybrid, bdd_hybrid_level, param.tag, estimator_level))
