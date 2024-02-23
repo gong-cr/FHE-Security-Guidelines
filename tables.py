@@ -15,7 +15,23 @@ quantum_model = RC.LaaMosPol14
 # 3. run the script
 
 # Table 5.1 - 128-bit security, ternary secret
+param_1024_ternary_classic_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**26, 
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_1024_ternary_classic_128"
+)
 
+param_1024_ternary_quantum_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**25,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_1024_ternary_quantum_128"
+)
 param_2048_ternary_classic_128 = LWE.Parameters(
     n = 2048,
     q = 2**54, 
@@ -447,6 +463,23 @@ Table_5_1_c = [(param_2048_ternary_classic_256, 256, classic_model),
 
 
 # Table 5.1 - 128-bit security, gaussian secret
+param_1024_gaussian_classic_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**19, 
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_1024_gaussian_classic_128"
+)
+
+param_1024_gaussian_quantum_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**27,
+    Xs = ND.DiscreteGaussian(3.19),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "param_2048_gaussian_quantum_128"
+)
 
 param_2048_gaussian_classic_128 = LWE.Parameters(
     n = 2048,
