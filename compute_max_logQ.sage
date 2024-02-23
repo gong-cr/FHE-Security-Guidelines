@@ -1,15 +1,17 @@
-import sys
+
+mport sys
 sys.path.insert(1, 'lattice-estimator')
 
 from estimator import *
 from functools import partial
 import time
 
+
 MODE_TERNARY = "ternary"
 MODE_GAUSSIAN = "gaussian"
+#sparse
 MODE_SPARSE = "sparse"
 hamming_weights = [128, 192, 256]
-
 
 stddev = 3.19
 error_dist = ND.DiscreteGaussian(stddev, mean=0, n=None)

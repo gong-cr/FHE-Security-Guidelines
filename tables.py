@@ -656,7 +656,7 @@ param_16384_gaussian_classic_192 = LWE.Parameters(
 
 param_16384_gaussian_quantum_192 = LWE.Parameters(
     n = 16384,
-    q = 2**286, #284
+    q = 2**285, #284
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
@@ -773,7 +773,7 @@ param_4096_gaussian_quantum_256 = LWE.Parameters(
 
 param_8192_gaussian_classic_256 = LWE.Parameters(
     n = 8192,
-    q = 2**120,
+    q = 2**119,
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,

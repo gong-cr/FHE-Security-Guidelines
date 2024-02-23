@@ -8,16 +8,17 @@ from sage.all import oo, log
 import time
 
 MODE_TERNARY = ND.Uniform(-1, 1)
-MODE_GAUSSIAN = ND.DiscreteGaussian(stddev, mean=0, n=None)
-#NOTE: sparse-LWE is not recommended in the guideline
+MODE_GAUSSIAN = ND.DiscreteGaussian(stddev=3.19, mean=0, n=None)
+#NOTE: sparse-LWE is currently not recommended in the guideline 2/16/2024
 
 error_dist = ND.DiscreteGaussian(stddev=3.19, mean=0, n=None)
 secret_mode = MODE_TERNARY # MODE_TERNARY or MODE_GAUSSIAN
-cost_model_classic = RC.BDGL16
+cost_model_classical = RC.BDGL16
 cost_model_quantum = RC.LaaMosPol14
 m = oo
 security_margin = 0
 n_list = [2**i for i in range(10, 18)]
+
 
 def initial_log_q(n, secret_dist, security_thres, power_setting):
     # Define the linear coefficients for each scenario
@@ -46,45 +47,33 @@ def initial_log_q(n, secret_dist, security_thres, power_setting):
     else:
         return "Invalid input combination. Please check your inputs and try again."
 
-# ESTIMATORS = {
-#     "classic": {
-#         "ternary": [partial(LWE.primal_usvp, red_cost_model=cost_model_classic),
-#                       partial(LWE.dual_hybrid, red_cost_model=cost_model_classic)],
-#         "gaussian": [partial(LWE.primal_usvp, red_cost_model=cost_model_classic),
-#                       partial(LWE.dual_hybrid, red_cost_model=cost_model_classic)],
-#         "sparse": [partial(LWE.dual_hybrid, red_cost_model=cost_model_classic, mitm_optimization=True)]
-#     },
-#     "quantum": {
-#         "ternary": [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
-#                       partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)],
-#         "gaussian": [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
-#                       partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)],
-#         "sparse": [partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum, mitm_optimization=True)]
-#     }
-# }
-#TODO
 ESTIMATORS = {
-    "classic": {
-        "ternary": [partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classic)],
-        "gaussian": [partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classic)],
-        "sparse": [partial(LWE.dual_hybrid, red_cost_model=cost_model_classic, mitm_optimization=True)]
+    "classical": {
+        MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
+                      partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)],
+        MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
+                      partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)]
     },
     "quantum": {
-        "ternary": [partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)],
-        "gaussian": [partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)],
-        "sparse": [partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum, mitm_optimization=True)]
+        MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
+                      partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)],
+        MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
+                      partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)]
     }
 }
+def get_estimators_for_mode(secret_mode, power_setting):
+    # print(secret_mode, power_setting)
+    return ESTIMATORS[power_setting][secret_mode]
 
 def cost_estimating(estimator, logq, n_dim, secret_dist, error_dist):
     instance = LWE.Parameters(n=n_dim, q=2**logq, Xs=secret_dist, Xe=error_dist, m=m)
-    start_time = time.time()
-    print(n_dim, logq)
+    # start_time = time.time()
+    # print(n_dim, logq)
     attack_costs = estimator(params=instance)
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    print("security = ", log(attack_costs["rop"], 2).n())
-    print(f"Elapsed time: {elapsed_time} seconds")
+    # end_time = time.time()
+    # elapsed_time = end_time - start_time
+    # print("security = ", log(attack_costs["rop"], 2).n())
+    # print(f"Elapsed time: {elapsed_time} seconds")
     return log(attack_costs["rop"], 2).n()
 
 def binary_search(estimator, n_dim, secret_dist, error_dist, security_target, logq_left, logq_right):
@@ -102,6 +91,7 @@ def binary_search(estimator, n_dim, secret_dist, error_dist, security_target, lo
             lptr = mid
         else:
             rptr = mid - 1
+    assert(cost_estimating(estimator, lptr, n_dim, secret_dist, error_dist)>=security_target)
     return lptr  #lptr == rptr
 
 def logq_search_interval(estimator, n_dim, secret_mode, error_dist, security_target, logq_initial, logq_interval=20):
@@ -129,47 +119,36 @@ def logq_search_interval(estimator, n_dim, secret_mode, error_dist, security_tar
 
 def maxlogq_finder(estimator, n_dim, secret_dist, error_dist, security_target, power_setting):
     """Find the specific maximal logq for a given estimator and parameters."""
-    print("Using estimator:", estimator)
+    # print("Using estimator:", estimator)
     logq_initial = initial_log_q(n_dim, secret_dist, security_thres, power_setting)
     # Determine secret distribution based on mode
     logq_left, logq_right = logq_search_interval(estimator, n_dim, secret_dist, error_dist, security_target, logq_initial)
     maxlogq = binary_search(estimator, n_dim, secret_dist, error_dist, security_target, logq_left, logq_right)
     return maxlogq
-#TODO
-def process_logq(security_target, estimator_classic, estimator_quantum, n_list, secret_mode, error_dist, logq_initial_classic_per_level, logq_initial_quantum_per_level):
-    logq_classical = logq_find_max(estimator_classic, n_list, secret_mode, error_dist, security_target, logq_initial_classic_per_level)
-    print("classical max_logq", logq_classical)
-    logq_quantum = logq_find_max(estimator_quantum, n_list, secret_mode, error_dist, security_target, logq_initial_quantum_per_level)
-    print("quantum max_logq", logq_quantum)
-    return logq_classical, logq_quantum
-#TODO
-def get_estimators_for_mode(secret_mode):
-    print(secret_mode)
-    return ESTIMATORS["classic"][secret_mode], ESTIMATORS["quantum"][secret_mode]
-#TODO
+
+def process_maxlogq(estimators, n_dim, secret_dist, error_dist, security_target, power_setting):
+    logq_list = []
+    for est in estimators:
+        logq = maxlogq_finder(est, n_dim, secret_dist, error_dist, security_target, power_setting)
+        logq_list.append(logq)
+    # print(f"security target ={security_target}")
+    # print(f"maxlogq list = {logq_list}")
+    return min(logq_list)
+
+secret = {MODE_TERNARY: "ternary", MODE_GAUSSIAN: "Gaussian"}
 for security_thres in [128, 192, 256]:
-    security_target = security_thres + (security_margin_sparse if secret_mode == MODE_SPARSE else security_margin)
-    print(f"security threshold = {security_thres}, margin = {security_target - security_thres}")
-    
-    all_logq_classical, all_logq_quantum = [], []
-    hamming_weights = [128, 192, 256] if secret_mode == MODE_SPARSE else [None]
-
-    for hamming_weight in hamming_weights:
-        if hamming_weight:  # This check ensures we only print for sparse mode
-            print(f"hamming_weight = {hamming_weight}")
-        
-        estimators_classic, estimators_quantum = get_estimators_for_mode(secret_mode)
-        for estimator_classic, estimator_quantum in zip(estimators_classic, estimators_quantum):
-            logq_classical, logq_quantum = process_logq(security_target, estimator_classic, estimator_quantum, n_list, secret_mode, error_dist, hamming_weight, logq_initial_classic[security_thres], logq_initial_quantum[security_thres])
-            
-            all_logq_classical.append(logq_classical)
-            all_logq_quantum.append(logq_quantum)
-
-    minimal_logq_classical = [min(logq) for logq in zip(*all_logq_classical)]
-    minimal_logq_quantum = [min(logq) for logq in zip(*all_logq_quantum)]
-
-    print(f"classic {secret_mode}", minimal_logq_classical)
-    print(f"quantum {secret_mode}", minimal_logq_quantum)
-    print("-------------------------------------")
+    security_target = security_thres + security_margin
+    print(f"security threshold = {security_thres}, margin = {security_margin}, target = {security_target}")
+    for n_dim in n_list:
+        if n_dim < 2048 and security_target > 130:
+            continue
+        print(f"dim = {n_dim}")
+        for power in {"classical", "quantum"}:
+            for secret_mode in {MODE_TERNARY, MODE_GAUSSIAN}:
+                estimators = get_estimators_for_mode(secret_mode, power)
+                logq = process_maxlogq(estimators, n_dim, secret_mode, error_dist, security_target, power)
+                        
+                print(f"{power} {secret[secret_mode]}, max logq = {logq}")
+        print("-------------------------------------")
 
 
