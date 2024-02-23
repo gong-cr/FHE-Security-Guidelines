@@ -18,7 +18,7 @@ cost_model_quantum = RC.LaaMosPol14
 m = oo
 security_margin = 0
 n_list = [2**i for i in range(10, 18)]
-
+# print(dir(LWE))
 
 def initial_log_q(n, secret_dist, security_thres, power_setting):
     # Define the linear coefficients for each scenario
@@ -50,15 +50,23 @@ def initial_log_q(n, secret_dist, security_thres, power_setting):
 ESTIMATORS = {
     "classical": {
         MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
-                      partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)],
+                      partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)
+                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
+                     ],
         MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
-                      partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)]
+                      partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)
+                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
+                    ]
     },
     "quantum": {
         MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
-                      partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)],
+                      partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)
+                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
+                      ],
         MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
-                      partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)]
+                      partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)
+                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
+                      ]
     }
 }
 def get_estimators_for_mode(secret_mode, power_setting):
@@ -68,7 +76,7 @@ def get_estimators_for_mode(secret_mode, power_setting):
 def cost_estimating(estimator, logq, n_dim, secret_dist, error_dist):
     instance = LWE.Parameters(n=n_dim, q=2**logq, Xs=secret_dist, Xe=error_dist, m=m)
     # start_time = time.time()
-    # print(n_dim, logq)
+    print(F"DEBUG: {n_dim, logq, secret_dist, error_dist}")
     attack_costs = estimator(params=instance)
     # end_time = time.time()
     # elapsed_time = end_time - start_time
@@ -100,6 +108,8 @@ def logq_search_interval(estimator, n_dim, secret_mode, error_dist, security_tar
     security_estimation(2**logQ_left, ...) >= security_target
     security_estimation(2**logQ_right, ...) < security_target
     """
+    if n_dim < 1200:
+        logq_interval = 5
     logq_left = logq_initial
     logq_right = None
 
