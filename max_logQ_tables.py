@@ -51,21 +51,21 @@ ESTIMATORS = {
     "classical": {
         MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)
-                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
+                    #   ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
                      ],
         MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)
-                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
+                    #   ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
                     ]
     },
     "quantum": {
         MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)
-                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
+                    #   ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
                       ],
         MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)
-                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
+                    #   ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
                       ]
     }
 }
@@ -76,7 +76,7 @@ def get_estimators_for_mode(secret_mode, power_setting):
 def cost_estimating(estimator, logq, n_dim, secret_dist, error_dist):
     instance = LWE.Parameters(n=n_dim, q=2**logq, Xs=secret_dist, Xe=error_dist, m=m)
     # start_time = time.time()
-    print(F"DEBUG: {n_dim, logq, secret_dist, error_dist}")
+    # print(F"DEBUG: {n_dim, logq, secret_dist, error_dist}")
     attack_costs = estimator(params=instance)
     # end_time = time.time()
     # elapsed_time = end_time - start_time
@@ -139,10 +139,11 @@ def maxlogq_finder(estimator, n_dim, secret_dist, error_dist, security_target, p
 def process_maxlogq(estimators, n_dim, secret_dist, error_dist, security_target, power_setting):
     logq_list = []
     for est in estimators:
+        # print(f"DEBUG: {est}")
         logq = maxlogq_finder(est, n_dim, secret_dist, error_dist, security_target, power_setting)
         logq_list.append(logq)
     # print(f"security target ={security_target}")
-    # print(f"maxlogq list = {logq_list}")
+    # print(f"DEBUG: maxlogq list = {logq_list}")
     return min(logq_list)
 
 secret = {MODE_TERNARY: "ternary", MODE_GAUSSIAN: "Gaussian"}
@@ -153,8 +154,8 @@ for security_thres in [128, 192, 256]:
         if n_dim < 2048 and security_target > 130:
             continue
         print(f"dim = {n_dim}")
-        for power in {"classical", "quantum"}:
-            for secret_mode in {MODE_TERNARY, MODE_GAUSSIAN}:
+        for power in ["classical", "quantum"]:
+            for secret_mode in [MODE_TERNARY, MODE_GAUSSIAN]:
                 estimators = get_estimators_for_mode(secret_mode, power)
                 logq = process_maxlogq(estimators, n_dim, secret_mode, error_dist, security_target, power)
                         
