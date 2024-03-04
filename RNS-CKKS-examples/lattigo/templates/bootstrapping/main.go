@@ -86,10 +86,11 @@ func main() {
 
 		// Since we use a secret distribution of density 2/3
 		// (i.e. Hamming weight ~43691) we need to specify
-		// custom paramters for the homomorphic modular reduction
-		// We set K to ceil(2.275*sqrt(2N/3)) to achieve < 2^{-32}
+		// custom paramters for the homomorphic modular reduction.
+		// We set K to ceil(2.281*sqrt(2N/3))=477 to achieve < 2^{-32}
 		// failure probability with 2^{15} complex slots.
-		K: utils.Pointy(476),
+		// This value for K can be obtained with failure.FindSuitableK(43691, 15, -32).
+		K: utils.Pointy(477),
 		// We then need adapt the approximation of the homomorphic
 		// modular reduction accordingly.
 		Mod1Type:    hefloat.CosContinuous,
