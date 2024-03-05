@@ -120,11 +120,16 @@ def logq_search_interval(estimator, n_dim, secret_mode, error_dist, security_tar
         else: #logq_right is found
             logq_right = logq_left
             logq_left -= logq_interval
-    while logq_right is None:#only when logq_left is found during the first iteration of the first while loop
-        logq_right = logq_initial + logq_interval if logq_right is None else logq_right + logq_interval
-        security_right = cost_estimating(estimator, logq_right, n_dim, secret_mode, error_dist)
-        if security_right < security_target:
-            break
+    
+    if logq_right is None:#only when logq_left is found during the first iteration of the first while loop
+        logq_right = logq_initial + logq_interval
+        while True:
+            security_right = cost_estimating(estimator, logq_right, n_dim, secret_mode, error_dist)
+            if security_right < security_target:
+                break
+            else:
+                logq_right += logq_interval
+    print(f"DEBUG: search range: {logq_left, logq_right}")
     return logq_left, logq_right
 
 def maxlogq_finder(estimator, n_dim, secret_dist, error_dist, security_target, power_setting):

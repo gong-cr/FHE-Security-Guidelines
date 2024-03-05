@@ -465,7 +465,7 @@ Table_5_1_c = [(param_2048_ternary_classic_256, 256, classic_model),
 # Table 5.1 - 128-bit security, gaussian secret
 param_1024_gaussian_classic_128 = LWE.Parameters(
     n = 1024,
-    q = 2**19, 
+    q = 2**29, 
     Xs = ND.DiscreteGaussian(3.19),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
