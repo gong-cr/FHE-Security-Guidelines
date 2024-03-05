@@ -3,12 +3,15 @@
 // Note that, unlike other bootstrappings (BGV/BFV/TFHE), the this bootstrapping does not reduce the error in the ciphertext, but only enables further computations.
 // This example shows how to bootstrap a single ciphertext whose ring degree is the same as the one of the bootstrapping parameters.
 // Use the flag -short to run the examples fast but with insecure parameters.
+//
+// This example requires 20GB of memory to run with secure parameters (LogN=16).
 package main
 
 import (
 	"flag"
 	"fmt"
 	"math"
+	"time"
 
 	"FHE-Security-Guidelines/RNS-CKKS-examples/lattigo/parameters"
 
@@ -30,7 +33,7 @@ func main() {
 	LogN := 16
 
 	if *flagShort {
-		LogN -= 3
+		LogN -= 2
 	}
 
 	//==============================
@@ -41,7 +44,7 @@ func main() {
 	// The residual parameters are the parameters used outside of the bootstrapping circuit.
 	params, err := hefloat.NewParametersFromLiteral(hefloat.ParametersLiteral{
 		LogN:            LogN,                                  // Log2 of the ring degree
-		LogQ:            []int{60, 45, 45, 45, 45, 45, 45, 45}, // Log2 of the ciphertext prime moduli
+		LogQ:            []int{55, 45, 45, 45, 45, 45, 45, 45}, // Log2 of the ciphertext prime moduli
 		LogP:            []int{61, 61, 61},                     // Log2 of the key-switch auxiliary prime moduli
 		LogDefaultScale: 45,                                    // Log2 of the scale
 	})
@@ -220,11 +223,12 @@ func main() {
 	// To equalize the scale, the function evaluator.SetScale(ciphertext, parameters.DefaultScale()) can be used at the expense of one level.
 	// If the ciphertext is is at level one or greater when given to the bootstrapper, this equalization is automatically done.
 	fmt.Println("Bootstrapping...")
+	now := time.Now()
 	ciphertext2, err := eval.Bootstrap(ciphertext1)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Done")
+	fmt.Printf("Done: %s\n", time.Since(now))
 
 	//=====================
 	//=== 6) DECRYPTION ===
