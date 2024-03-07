@@ -4,7 +4,7 @@
 // This example shows how to bootstrap a single ciphertext whose ring degree is the same as the one of the bootstrapping parameters.
 // Use the flag -short to run the examples fast but with insecure parameters.
 //
-// This example requires 20GB of memory to run with secure parameters (LogN=16).
+// This example requires 24GB of memory to run with secure parameters (LogN=16).
 package main
 
 import (
@@ -100,7 +100,7 @@ func main() {
 		// We set K to ceil(2.281*sqrt(2N/3))=477 to achieve < 2^{-32}
 		// failure probability with 2^{15} complex slots.
 		// This value for K can be obtained with failure.FindSuitableK(43691, 15, -32).
-		K: utils.Pointy(477),
+		K: utils.Pointy(487),
 		// We then need adapt the approximation of the homomorphic
 		// modular reduction accordingly.
 		Mod1Type:    hefloat.CosContinuous,
