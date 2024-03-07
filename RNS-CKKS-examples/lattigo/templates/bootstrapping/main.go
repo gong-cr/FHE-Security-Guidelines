@@ -19,7 +19,7 @@ import (
 	"github.com/tuneinsight/lattigo/v5/he/hefloat"
 	"github.com/tuneinsight/lattigo/v5/he/hefloat/bootstrapping"
 	"github.com/tuneinsight/lattigo/v5/utils"
-	"github.com/tuneinsight/lattigo/v5/utils/sampling"
+	//"github.com/tuneinsight/lattigo/v5/utils/sampling"
 )
 
 var flagShort = flag.Bool("short", false, "run the example with a smaller and insecure ring degree.")
@@ -44,9 +44,9 @@ func main() {
 	// The residual parameters are the parameters used outside of the bootstrapping circuit.
 	params, err := hefloat.NewParametersFromLiteral(hefloat.ParametersLiteral{
 		LogN:            LogN,                                  // Log2 of the ring degree
-		LogQ:            []int{55, 45, 45, 45, 45, 45, 45, 45}, // Log2 of the ciphertext prime moduli
-		LogP:            []int{61, 61, 61},                     // Log2 of the key-switch auxiliary prime moduli
-		LogDefaultScale: 45,                                    // Log2 of the scale
+		LogQ:            []int{45, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35}, // Log2 of the ciphertext prime moduli
+		LogP:            []int{55, 40, 40},                     // Log2 of the key-switch auxiliary prime moduli
+		LogDefaultScale: 35,                                    // Log2 of the scale
 	})
 
 	if err != nil {
@@ -87,6 +87,13 @@ func main() {
 		// set it to 0 to not use it.
 		EphemeralSecretWeight: utils.Pointy(0),
 
+		// The default values for the following fields is set for
+		// an expected precision of ~27.5 bits, however since we are
+		// constrained to a dense secrete, the values can be reduced
+		// to gain some more homomorphic capacity to allocate to the
+		// residual parameters.
+		SlotsToCoeffsFactorizationDepthAndLogScales: [][]int{{30}, {30}, {30}},
+
 		// Since we use a secret distribution of density 2/3
 		// (i.e. Hamming weight ~43691) we need to specify
 		// custom paramters for the homomorphic modular reduction.
@@ -99,16 +106,6 @@ func main() {
 		Mod1Type:    hefloat.CosContinuous,
 		Mod1Degree:  utils.Pointy(255),
 		DoubleAngle: utils.Pointy(4),
-
-		// The bootstrapping with these parameter achieves ~16.5 bits
-		// of precision, which is low compared to what the parameters
-		// can offer with a scaling factor of 2^{45}.
-		// We thus specify second iteration and reserve a prime for it,
-		// to achieve ~32bits of precision.
-		IterationsParameters: &bootstrapping.IterationsParameters{
-			BootstrappingPrecision: []float64{16},
-			ReservedPrimeBitSize:   20,
-		},
 	}
 
 	//===================================
@@ -194,9 +191,10 @@ func main() {
 
 	// Generate a random plaintext with values uniformely distributed
 	// in [-1, 1] for the real and imaginary part.
+	slots := params.MaxSlots()
 	valuesWant := make([]complex128, params.MaxSlots())
 	for i := range valuesWant {
-		valuesWant[i] = sampling.RandComplex128(-1, 1)
+		valuesWant[i] = complex(float64(i) / float64(slots-1), float64(i) / float64(slots-1))
 	}
 
 	// We encrypt at level 0
