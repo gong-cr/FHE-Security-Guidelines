@@ -127,7 +127,7 @@ tfhe_1024_classic_128 = LWE.Parameters(
 
 tfhe_512_classic_128 = LWE.Parameters(
     n = 512,
-    q = 2**27,
+    q = 2**14,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.2),
     m = oo,
