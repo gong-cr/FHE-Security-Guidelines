@@ -1,7 +1,9 @@
 import sys
 sys.path.insert(1, 'lattice-estimator')
 from estimator import *
+from estimator.lwe_dual import dual_hybrid
 from sage.all import oo, log
+from functools import partial
 
 classic_model = RC.BDGL16
 quantum_model = RC.LaaMosPol14
@@ -913,7 +915,6 @@ Table_5_1_f = [(param_2048_gaussian_classic_256, 256, classic_model),
 
 
 # Table 4.7 (we ignore q = 2**32 as the relative error is the same)
-# Cross check and add the 192/256
 
 param_tfhe_630_binary_classic_128 = LWE.Parameters(
     n = 630,
@@ -922,15 +923,6 @@ param_tfhe_630_binary_classic_128 = LWE.Parameters(
     Xe = ND.DiscreteGaussian(2**49.9),
     m = oo,
     tag = "param_tfhe_630_binary_classic_128"
-)
-
-param_tfhe_630_binary_quantum_128 = LWE.Parameters(
-    n = 630,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**50.9),
-    m = oo,
-    tag = "param_tfhe_630_binary_quantum_128"
 )
 
 param_tfhe_630_ternary_classic_128 = LWE.Parameters(
@@ -942,16 +934,6 @@ param_tfhe_630_ternary_classic_128 = LWE.Parameters(
     tag = "param_tfhe_630_ternary_classic_128"
 )
 
-param_tfhe_630_ternary_quantum_128 = LWE.Parameters(
-    n = 630,
-    q = 2**64,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**49.7),
-    m = oo,
-    tag = "param_tfhe_630_ternary_quantum_128"
-)
-
-#TODO: update
 param_tfhe_630_gaussian_classic_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
@@ -961,52 +943,49 @@ param_tfhe_630_gaussian_classic_128 = LWE.Parameters(
     tag = "param_tfhe_630_gaussian_classic_128"
 )
 
-#TODO: update
+param_tfhe_630_binary_quantum_128 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**50.9),
+    m = oo,
+    tag = "param_tfhe_630_binary_quantum_128"
+)
+
+param_tfhe_630_ternary_quantum_128 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**49.7),
+    m = oo,
+    tag = "param_tfhe_630_ternary_quantum_128"
+)
+
 param_tfhe_630_gaussian_quantum_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**47.3),
+    Xe = ND.DiscreteGaussian(2**47.4),
     m = oo,
     tag = "param_tfhe_630_gaussian_quantum_128"
 )
 
-#TODO: update
 param_tfhe_1024_binary_classic_128 = LWE.Parameters(
     n = 1024,
     q = 2**64,
     Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**39.5),
+    Xe = ND.DiscreteGaussian(2**39.6),
     m = oo,
     tag = "param_tfhe_1024_binary_classic_128"
 )
 
-param_tfhe_1024_binary_quantum_128 = LWE.Parameters(
-    n = 1024,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**41.2),
-    m = oo,
-    tag = "param_tfhe_1024_binary_quantum_128"
-)
-
-#TODO: update
 param_tfhe_1024_ternary_classic_128 = LWE.Parameters(
     n = 1024,
     q = 2**64,
-    Xs = ND.UniformMod(2),
+    Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(2**38.3),
     m = oo,
     tag = "param_tfhe_1024_ternary_classic_128"
-)
-
-param_tfhe_1024_ternary_quantum_128 = LWE.Parameters(
-    n = 1024,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**40.0),
-    m = oo,
-    tag = "param_tfhe_1024_ternary_quantum_128"
 )
 
 param_tfhe_1024_gaussian_classic_128 = LWE.Parameters(
@@ -1018,7 +997,24 @@ param_tfhe_1024_gaussian_classic_128 = LWE.Parameters(
     tag = "param_tfhe_1024_gaussian_classic_128"
 )
 
-#TODO: update
+param_tfhe_1024_binary_quantum_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**41.2),
+    m = oo,
+    tag = "param_tfhe_1024_binary_quantum_128"
+)
+
+param_tfhe_1024_ternary_quantum_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**40.0),
+    m = oo,
+    tag = "param_tfhe_1024_ternary_quantum_128"
+)
+
 param_tfhe_1024_gaussian_quantum_128 = LWE.Parameters(
     n = 1024,
     q = 2**64,
@@ -1037,33 +1033,13 @@ param_tfhe_2048_binary_classic_128 = LWE.Parameters(
     tag = "param_tfhe_2048_binary_classic_128"
 )
 
-param_tfhe_2048_binary_quantum_128 = LWE.Parameters(
-    n = 2048,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**16.0),
-    m = oo,
-    tag = "param_tfhe_2048_binary_quantum_128"
-)
-
-#TODO: update
 param_tfhe_2048_ternary_classic_128 = LWE.Parameters(
     n = 2048,
     q = 2**64,
-    Xs = ND.UniformMod(2),
+    Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(2**11.4),
     m = oo,
     tag = "param_tfhe_2048_ternary_classic_128"
-)
-
-#TODO: update
-param_tfhe_2048_ternary_quantum_128 = LWE.Parameters(
-    n = 2048,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**14.8),
-    m = oo,
-    tag = "param_tfhe_2048_ternary_quantum_128"
 )
 
 param_tfhe_2048_gaussian_classic_128 = LWE.Parameters(
@@ -1073,6 +1049,24 @@ param_tfhe_2048_gaussian_classic_128 = LWE.Parameters(
     Xe = ND.DiscreteGaussian(2**9.4),
     m = oo,
     tag = "param_tfhe_2048_gaussian_classic_128"
+)
+
+param_tfhe_2048_binary_quantum_128 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**16.0),
+    m = oo,
+    tag = "param_tfhe_2048_binary_quantum_128"
+)
+
+param_tfhe_2048_ternary_quantum_128 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**14.8),
+    m = oo,
+    tag = "param_tfhe_2048_ternary_quantum_128"
 )
 
 param_tfhe_2048_gaussian_quantum_128 = LWE.Parameters(
@@ -1093,31 +1087,13 @@ param_tfhe_4096_binary_classic_128 = LWE.Parameters(
     tag = "param_tfhe_4096_binary_classic_128"
 )
 
-param_tfhe_4096_binary_quantum_128 = LWE.Parameters(
-    n = 4096,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**2.0),
-    m = oo,
-    tag = "param_tfhe_4096_binary_quantum_128"
-)
-
 param_tfhe_4096_ternary_classic_128 = LWE.Parameters(
     n = 4096,
     q = 2**64,
-    Xs = ND.UniformMod(2),
+    Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(2**2.0),
     m = oo,
     tag = "param_tfhe_4096_ternary_classic_128"
-)
-
-param_tfhe_4096_ternary_quantum_128 = LWE.Parameters(
-    n = 4096,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**2.0),
-    m = oo,
-    tag = "param_tfhe_4096_ternary_quantum_128"
 )
 
 param_tfhe_4096_gaussian_classic_128 = LWE.Parameters(
@@ -1127,6 +1103,24 @@ param_tfhe_4096_gaussian_classic_128 = LWE.Parameters(
     Xe = ND.DiscreteGaussian(2**2.0),
     m = oo,
     tag = "param_tfhe_4096_gaussian_classic_128"
+)
+
+param_tfhe_4096_binary_quantum_128 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo,
+    tag = "param_tfhe_4096_binary_quantum_128"
+)
+
+param_tfhe_4096_ternary_quantum_128 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo,
+    tag = "param_tfhe_4096_ternary_quantum_128"
 )
 
 param_tfhe_4096_gaussian_quantum_128 = LWE.Parameters(
@@ -1163,9 +1157,440 @@ Table_5_2 = [(param_tfhe_630_binary_classic_128, 128, classic_model),
              (param_tfhe_4096_gaussian_classic_128, 128, classic_model),
              (param_tfhe_4096_gaussian_quantum_128, 128, quantum_model)]
 
-Table_5_3 = []
 
-Table_5_4 = []
+param_tfhe_630_binary_classic_192 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**55.6),
+    m = oo,
+    tag = "param_tfhe_630_binary_classic_192"
+)
+
+param_tfhe_630_ternary_classic_192 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**54.2),
+    m = oo,
+    tag = "param_tfhe_630_ternary_classic_192"
+)
+
+param_tfhe_630_gaussian_classic_192 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**51.7),
+    m = oo,
+    tag = "param_tfhe_630_gaussian_classic_192"
+)
+
+param_tfhe_630_binary_quantum_192 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**56.3),
+    m = oo,
+    tag = "param_tfhe_630_binary_quantum_192"
+)
+
+param_tfhe_630_ternary_quantum_192 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**55.0),
+    m = oo,
+    tag = "param_tfhe_630_ternary_quantum_192"
+)
+
+param_tfhe_630_gaussian_quantum_192 = LWE.Parameters(
+    n = 630,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**52.6),
+    m = oo,
+    tag = "param_tfhe_630_gaussian_quantum_192"
+)
+
+param_tfhe_1024_binary_classic_192 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**48.3),
+    m = oo,
+    tag = "param_tfhe_1024_binary_classic_192"
+)
+
+param_tfhe_1024_ternary_classic_192 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**47.0),
+    m = oo,
+    tag = "param_tfhe_1024_ternary_classic_192"
+)
+
+param_tfhe_1024_gaussian_classic_192 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**44.4),
+    m = oo,
+    tag = "param_tfhe_1024_gaussian_classic_192"
+)
+
+param_tfhe_1024_binary_quantum_192 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**49.5),
+    m = oo,
+    tag = "param_tfhe_1024_binary_quantum_192"
+)
+
+param_tfhe_1024_ternary_quantum_192 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**48.2),
+    m = oo,
+    tag = "param_tfhe_1024_ternary_quantum_192"
+)
+
+param_tfhe_1024_gaussian_quantum_192 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**45.8),
+    m = oo,
+    tag = "param_tfhe_1024_gaussian_quantum_192"
+)
+
+param_tfhe_2048_binary_classic_192 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**29.4),
+    m = oo,
+    tag = "param_tfhe_2048_binary_classic_192"
+)
+
+param_tfhe_2048_ternary_classic_192 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**28.1),
+    m = oo,
+    tag = "param_tfhe_2048_ternary_classic_192"
+)
+
+param_tfhe_2048_gaussian_classic_192 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**25.5),
+    m = oo,
+    tag = "param_tfhe_2048_gaussian_classic_192"
+)
+
+param_tfhe_2048_binary_quantum_192 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**31.9),
+    m = oo,
+    tag = "param_tfhe_2048_binary_quantum_192"
+)
+
+param_tfhe_2048_ternary_quantum_192 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**30.6),
+    m = oo,
+    tag = "param_tfhe_2048_ternary_quantum_192"
+)
+
+param_tfhe_2048_gaussian_quantum_192 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**28.2),
+    m = oo,
+    tag = "param_tfhe_2048_gaussian_quantum_192"
+)
+
+param_tfhe_4096_binary_classic_192 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo,
+    tag = "param_tfhe_4096_binary_classic_192"
+)
+
+param_tfhe_4096_ternary_classic_192 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo,
+    tag = "param_tfhe_4096_ternary_classic_192"
+)
+
+param_tfhe_4096_gaussian_classic_192 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo,
+    tag = "param_tfhe_4096_gaussian_classic_192"
+)
+
+param_tfhe_4096_binary_quantum_192 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo,
+    tag = "param_tfhe_4096_binary_quantum_192"
+)
+
+param_tfhe_4096_ternary_quantum_192 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo,
+    tag = "param_tfhe_4096_ternary_quantum_192"
+)
+
+param_tfhe_4096_gaussian_quantum_192 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**2.0),
+    m = oo,
+    tag = "param_tfhe_4096_gaussian_quantum_192"
+)
+
+Table_5_3 = [(param_tfhe_630_binary_classic_192, 192, classic_model),
+             (param_tfhe_630_binary_quantum_192, 192, quantum_model),
+             (param_tfhe_630_ternary_classic_192, 192, classic_model),
+             (param_tfhe_630_ternary_quantum_192, 192, quantum_model),
+             (param_tfhe_630_gaussian_classic_192, 192, classic_model),
+             (param_tfhe_630_gaussian_quantum_192, 192, quantum_model),
+             (param_tfhe_1024_binary_classic_192, 192, classic_model),
+             (param_tfhe_1024_binary_quantum_192, 192, quantum_model),
+             (param_tfhe_1024_ternary_classic_192, 192, classic_model),
+             (param_tfhe_1024_ternary_quantum_192, 192, quantum_model),
+             (param_tfhe_1024_gaussian_classic_192, 192, classic_model),
+             (param_tfhe_1024_gaussian_quantum_192, 192, quantum_model),
+             (param_tfhe_2048_binary_classic_192, 192, classic_model),
+             (param_tfhe_2048_binary_quantum_192, 192, quantum_model),
+             (param_tfhe_2048_ternary_classic_192, 192, classic_model),
+             (param_tfhe_2048_ternary_quantum_192, 192, quantum_model), 
+             (param_tfhe_2048_gaussian_classic_192, 192, classic_model),
+             (param_tfhe_2048_gaussian_quantum_192, 192, quantum_model),
+             (param_tfhe_4096_binary_classic_192, 192, classic_model),
+             (param_tfhe_4096_binary_quantum_192, 192, quantum_model),
+             (param_tfhe_4096_ternary_classic_192, 192, classic_model),
+             (param_tfhe_4096_ternary_quantum_192, 192, quantum_model),
+             (param_tfhe_4096_gaussian_classic_192, 192, classic_model),
+             (param_tfhe_4096_gaussian_quantum_192, 192, quantum_model)]
+
+
+param_tfhe_1024_binary_classic_256 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**53.0),
+    m = oo,
+    tag = "param_tfhe_1024_binary_classic_256"
+)
+
+param_tfhe_1024_ternary_classic_256 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**51.6),
+    m = oo,
+    tag = "param_tfhe_1024_ternary_classic_256"
+)
+
+param_tfhe_1024_gaussian_classic_256 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**48.9),
+    m = oo,
+    tag = "param_tfhe_1024_gaussian_classic_256"
+)
+
+param_tfhe_1024_binary_quantum_256 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**53.9),
+    m = oo,
+    tag = "param_tfhe_1024_binary_quantum_256"
+)
+
+param_tfhe_1024_ternary_quantum_256 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**52.6),
+    m = oo,
+    tag = "param_tfhe_1024_ternary_quantum_256"
+)
+
+param_tfhe_1024_gaussian_quantum_256 = LWE.Parameters(
+    n = 1024,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**50.1),
+    m = oo,
+    tag = "param_tfhe_1024_gaussian_quantum_256"
+)
+
+param_tfhe_2048_binary_classic_256 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**38.2),
+    m = oo,
+    tag = "param_tfhe_2048_binary_classic_256"
+)
+
+param_tfhe_2048_ternary_classic_256 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**36.8),
+    m = oo,
+    tag = "param_tfhe_2048_ternary_classic_256"
+)
+
+param_tfhe_2048_gaussian_classic_256 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**34.1),
+    m = oo,
+    tag = "param_tfhe_2048_gaussian_classic_256"
+)
+
+param_tfhe_2048_binary_quantum_256 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**40.1),
+    m = oo,
+    tag = "param_tfhe_2048_binary_quantum_256"
+)
+
+param_tfhe_2048_ternary_quantum_256 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**38.8),
+    m = oo,
+    tag = "param_tfhe_2048_ternary_quantum_256"
+)
+
+param_tfhe_2048_gaussian_quantum_256 = LWE.Parameters(
+    n = 2048,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**36.1),
+    m = oo,
+    tag = "param_tfhe_2048_gaussian_quantum_256"
+)
+
+param_tfhe_4096_binary_classic_256 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**8.6),
+    m = oo,
+    tag = "param_tfhe_4096_binary_classic_256"
+)
+
+param_tfhe_4096_ternary_classic_256 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**7.2),
+    m = oo,
+    tag = "param_tfhe_4096_ternary_classic_256"
+)
+
+param_tfhe_4096_gaussian_classic_256 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**4.3),
+    m = oo,
+    tag = "param_tfhe_4096_gaussian_classic_256"
+)
+
+param_tfhe_4096_binary_quantum_256 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**12.5),
+    m = oo,
+    tag = "param_tfhe_4096_binary_quantum_256"
+)
+
+param_tfhe_4096_ternary_quantum_256 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(2**11.3),
+    m = oo,
+    tag = "param_tfhe_4096_ternary_quantum_256"
+)
+
+param_tfhe_4096_gaussian_quantum_256 = LWE.Parameters(
+    n = 4096,
+    q = 2**64,
+    Xs = ND.DiscreteGaussian(4),
+    Xe = ND.DiscreteGaussian(2**8.8),
+    m = oo,
+    tag = "param_tfhe_4096_gaussian_quantum_256"
+)
+
+param_tfhe_8192_binary_quantum_256 = LWE.Parameters(
+    n = 8192,
+    q = 2**64,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**2),
+    m = oo,
+    tag = "param_tfhe_8192_binary_quantum_256"
+)
+
+
+Table_5_4 = [(param_tfhe_1024_binary_classic_256, 256, classic_model),
+             (param_tfhe_1024_binary_quantum_256, 256, quantum_model),
+             (param_tfhe_1024_ternary_classic_256, 256, classic_model),
+             (param_tfhe_1024_ternary_quantum_256, 256, quantum_model),
+             (param_tfhe_1024_gaussian_classic_256, 256, classic_model),
+             (param_tfhe_1024_gaussian_quantum_256, 256, quantum_model),
+             (param_tfhe_2048_binary_classic_256, 256, classic_model),
+             (param_tfhe_2048_binary_quantum_256, 256, quantum_model),
+             (param_tfhe_2048_ternary_classic_256, 256, classic_model),
+             (param_tfhe_2048_ternary_quantum_256, 256, quantum_model), 
+             (param_tfhe_2048_gaussian_classic_256, 256, classic_model),
+             (param_tfhe_2048_gaussian_quantum_256, 256, quantum_model),
+             (param_tfhe_4096_binary_classic_256, 256, classic_model),
+             (param_tfhe_4096_binary_quantum_256, 256, quantum_model),
+             (param_tfhe_4096_ternary_classic_256, 256, classic_model),
+             (param_tfhe_4096_ternary_quantum_256, 256, quantum_model),
+             (param_tfhe_4096_gaussian_classic_256, 256, classic_model),
+             (param_tfhe_4096_gaussian_quantum_256, 256, quantum_model),
+             (param_tfhe_8192_binary_quantum_256, 256, quantum_model)]
 
 output_file = "record.txt"
 params_update_file = "params_to_update.txt"
@@ -1173,10 +1598,15 @@ level_diff_file = "bdd_hyrbid_diff.txt"
 all_security_params = Table_5_1_a + Table_5_1_b + Table_5_1_c + Table_5_1_d + Table_5_1_e + Table_5_1_f + Table_5_2 + Table_5_3 + Table_5_4
 # we can cross-check functional params by eye from the maxQ / minSD table
 # add functionality to turn off print
+
 with open(output_file, "w") as file, open(params_update_file, "w") as update_file, open(level_diff_file, "w") as diff_file:
     for (param, security_level, model) in all_security_params:
         # if param.n != 16384*2:#delete
         #     continue #delete
+
+        non_matzov_dual = partial(
+                dual_hybrid, red_cost_model=model)
+
         file.write("parameters = {}\n".format(param.tag))
         print("parameters = {}".format(param.tag))
         # params_to_update = []
@@ -1185,12 +1615,21 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
             #dual_level = LWE.dual_hybrid(param, red_cost_model = model)
             #estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
             # hybrid-decoding
+            print("param.n  = {}".format(param.n))
             if param.n <= 16384: #param.n == 16384*2
-                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd"))
+                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "dual_hybrid"))
+                print("EST = {}".format(est))
+                est_dual = non_matzov_dual(param, red_cost_model=model)
+                print("EST-dual = {}".format(est_dual))
             else: 
                 # check function name
-                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "bdd", "bdd_mitm_hybrid", "bdd_hybrid"))
+                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "dual_hybrid"))
+                est_dual = non_matzov_dual(param, red_cost_model=model)
+                print("EST-dual = {}".format(est_dual))
+                print("EST = {}".format(est))
+
             file.write("{}\n".format(est))
+            file.write("{}\n".format(est_dual))
             costs = []
             costs_no_bdd_hybrid = [] #bdd
             for key in est.keys():
@@ -1198,6 +1637,7 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
                 costs.append(cost)
                 if key != "bdd_hybrid":  # Exclude 'bdd_hybrid' cost #bdd
                     costs_no_bdd_hybrid.append(cost) #bdd
+            costs.append(est_dual["rop"])
             estimator_level = log(min(costs),2)
 
             if param.n <= 16384: 
@@ -1211,6 +1651,7 @@ with open(output_file, "w") as file, open(params_update_file, "w") as update_fil
             else:
                 file.write("pass.\n")
         except Exception as e:
+            print(e)
             file.write("{}\n".format(e))
             file.write("fail.\n")
         file.flush()
