@@ -2028,3 +2028,65 @@ Table_5_3_c = [
              (param_tfhe_4096_gaussian_quantum_256, 256, quantum_model),
              (param_tfhe_8192_binary_quantum_256, 256, quantum_model)]
 
+
+with open(output_file, "w") as file, open(params_update_file, "w") as update_file, open(level_diff_file, "w") as diff_file:
+    for (param, security_level, model) in all_security_params:
+        # if param.n != 16384*2:#delete
+        #     continue #delete
+
+        non_matzov_dual = partial(
+                dual_hybrid, red_cost_model=model)
+
+        file.write("parameters = {}\n".format(param.tag))
+        print("parameters = {}".format(param.tag))
+        # params_to_update = []
+        try:
+            #usvp_level = LWE.primal_usvp(param, red_cost_model = model)
+            #dual_level = LWE.dual_hybrid(param, red_cost_model = model)
+            #estimator_level = log(min(usvp_level["rop"], dual_level["rop"]),2)
+            # hybrid-decoding
+            print("param.n  = {}".format(param.n))
+            if param.n <= 16384: #param.n == 16384*2
+                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "dual_hybrid"))
+                print("EST = {}".format(est))
+                est_dual = non_matzov_dual(param, red_cost_model=model)
+                print("EST-dual = {}".format(est_dual))
+            else: 
+                # check function name
+                est = LWE.estimate(param, red_cost_model = model, deny_list = ("arora-gb", "bkw", "dual_hybrid"))
+                est_dual = non_matzov_dual(param, red_cost_model=model)
+                print("EST-dual = {}".format(est_dual))
+                print("EST = {}".format(est))
+
+            file.write("{}\n".format(est))
+            file.write("{}\n".format(est_dual))
+            costs = []
+            costs_no_bdd_hybrid = [] #bdd
+            for key in est.keys():
+                cost = est[key]["rop"]
+                costs.append(cost)
+                if key != "bdd_hybrid":  # Exclude 'bdd_hybrid' cost #bdd
+                    costs_no_bdd_hybrid.append(cost) #bdd
+            costs.append(est_dual["rop"])
+            estimator_level = log(min(costs),2)
+
+            if param.n <= 16384: 
+                bdd_hybrid_level = log(est["bdd_hybrid"]["rop"],2)
+                estimator_level_no_bdd_hybrid = log(min(costs_no_bdd_hybrid), 2)
+                diff_file.write("{}, {}, {}, {}, {}, {}\n".format(param.n, estimator_level_no_bdd_hybrid - bdd_hybrid_level, estimator_level_no_bdd_hybrid, bdd_hybrid_level, param.tag, estimator_level))
+            if security_level > estimator_level:
+                file.write("target security level = {}\n".format(security_level))
+                file.write("attained security level = {}\n".format(estimator_level))
+                update_file.write("{},{}\n".format(param.tag, estimator_level))
+            else:
+                file.write("pass.\n")
+        except Exception as e:
+            print(e)
+            file.write("{}\n".format(e))
+            file.write("fail.\n")
+        file.flush()
+        update_file.flush()
+        diff_file.flush()
+
+print("COMPLETE")
+# file.write("Parameters to update: {}\n".format(params_to_update))
