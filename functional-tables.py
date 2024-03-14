@@ -64,10 +64,10 @@ bfvbgv_nobootstrap_65536_quantum_256 = LWE.Parameters(
 Table_5_4 = [
     (bfvbgv_nobootstrap_16384_classic_128, 128, classic_model),
     (bfvbgv_nobootstrap_16384_quantum_128, 128, quantum_model),
-    (bfvbgv_nobootstrap_32768_classic_128, 192, classic_model),
-    (bfvbgv_nobootstrap_32768_quantum_128, 192, quantum_model),
-    (bfvbgv_nobootstrap_65536_classic_128, 256, classic_model),
-    (bfvbgv_nobootstrap_65536_quantum_128, 256, quantum_model),
+    (bfvbgv_nobootstrap_32768_classic_192, 192, classic_model),
+    (bfvbgv_nobootstrap_32768_quantum_192, 192, quantum_model),
+    (bfvbgv_nobootstrap_65536_classic_256, 256, classic_model),
+    (bfvbgv_nobootstrap_65536_quantum_256, 256, quantum_model),
 ]
 
 # Table 5.5
@@ -253,4 +253,25 @@ Table_5_7 = [
     (ckks_bootstrap_131072_classic_192, 192, classic_model),
 ]
 
+Tables = Table_5_4 + Table_5_5 + Table_5_6 + Table_5_7
+
+def run():
+
+    from functools import partial
+    from estimator.lwe_dual import dual_hybrid
+    dh = partial(dual_hybrid)
+
+    for x in Tables:
+        print("Testing parameter set: {}".format(x[0].tag))
+        print("Target level: {}".format(x[1]))
+        print("uSVP estimate:")
+        usvp = LWE.primal_usvp(x[0], red_cost_model = x[2])
+        print(usvp)
+        print("Hybrid dual estimate:")
+        dual = dh(x[0], red_cost_model = x[2])
+        print(dual)
+        print(" ")
+        print("------------------------------------------------")
+        print(" ")
+    return 0
 
