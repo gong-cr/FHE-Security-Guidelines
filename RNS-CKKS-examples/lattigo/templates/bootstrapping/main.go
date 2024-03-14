@@ -4,7 +4,7 @@
 // This example shows how to bootstrap a single ciphertext whose ring degree is the same as the one of the bootstrapping parameters.
 // Use the flag -short to run the examples fast but with insecure parameters.
 //
-// This example requires 24GB of memory to run with secure parameters (LogN=16).
+// This example requires 24GB of memory to run with 128-bit secure parameters (LogN=16).
 package main
 
 import (
@@ -14,40 +14,99 @@ import (
 	"time"
 
 	"FHE-Security-Guidelines/RNS-CKKS-examples/lattigo/parameters"
+	"FHE-Security-Guidelines/RNS-CKKS-examples/lattigo/templates/bootstrapping/failure"
 
 	"github.com/tuneinsight/lattigo/v5/core/rlwe"
 	"github.com/tuneinsight/lattigo/v5/he/hefloat"
 	"github.com/tuneinsight/lattigo/v5/he/hefloat/bootstrapping"
+	"github.com/tuneinsight/lattigo/v5/ring"
 	"github.com/tuneinsight/lattigo/v5/utils"
-	//"github.com/tuneinsight/lattigo/v5/utils/sampling"
 )
 
 var flagShort = flag.Bool("short", false, "run the example with a smaller and insecure ring degree.")
+
+type Parameters struct {
+	ResidualLit      hefloat.ParametersLiteral
+	BootstrappingLit bootstrapping.ParametersLiteral
+}
+
+var ParametersClassical = map[int]Parameters{
+	128: {
+
+		// First we must define the residual parameters.
+		// The residual parameters are the parameters used outside of the bootstrapping circuit.
+		ResidualLit: hefloat.ParametersLiteral{
+			LogN:            16,                                                    // Log2 of the ring degree
+			LogQ:            []int{45, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35}, // Log2 of the ciphertext prime moduli
+			LogP:            []int{55, 40, 40},                                     // Log2 of the key-switch auxiliary prime moduli
+			LogDefaultScale: 35,                                                    // Log2 of the scale
+		},
+
+		// The bootstrapping circuit use its own Parameters
+		// which will be automatically instantiated given
+		// the residual parameters and the bootstrapping parameters.
+
+		// !WARNING! The bootstrapping parameters are not ensured to
+		// be 128-bit secure, it is the responsibility of the user
+		// to check that the meet the security requirement and tweak
+		// them if necessary.
+
+		// In this example we need to specify multiple advanced parameters
+		// for the bootstrapping to work since we are constrainted to use
+		// a secret with density 2/3.
+		BootstrappingLit: bootstrapping.ParametersLiteral{
+			// We specify LogN to ensure that both the residual
+			// parameters and the bootstrapping parameters have
+			// the same LogN. This is not required, but we want
+			// it for this example.
+			LogN: utils.Pointy(16),
+
+			// In this example we manually specify the
+			// bootstrapping parameters' secret distribution.
+			// This is not necessary, but we ensure here that
+			// they are the same as the residual parameters.
+			Xs: ring.Ternary{P: 2 / 3.0},
+
+			// By default the Sparse-Secret Encapsulation technique of
+			// https://eprint.iacr.org/2022/024 is used, so we manually
+			// set it to 0 to not use it.
+			EphemeralSecretWeight: utils.Pointy(0),
+
+			// The default values for the following fields is set for
+			// an expected precision of ~27.5 bits, however since we are
+			// constrained to a dense secrete, the final precision is closer
+			// to ~16 bits, so the size of the prime moduli can be reduced
+			// to gain some more homomorphic capacity to allocate to the
+			// residual parameters.
+			SlotsToCoeffsFactorizationDepthAndLogScales: [][]int{{30}, {30}, {30}},
+
+			K: utils.Pointy(512),
+			// We then need adapt the approximation of the homomorphic
+			// modular reduction accordingly.
+			Mod1Type:    hefloat.CosContinuous,
+			Mod1Degree:  utils.Pointy(255),
+			DoubleAngle: utils.Pointy(4),
+		},
+	},
+}
 
 func main() {
 
 	flag.Parse()
 
-	// Default LogN, which with the following defined parameters
-	// provides a security of equal or greater to 128-bit.
-	LogN := 16
+	ResidualLit := ParametersClassical[128].ResidualLit
+	BootstrappingLit := ParametersClassical[128].BootstrappingLit
 
 	if *flagShort {
-		LogN -= 2
+		ResidualLit.LogN -= 2
+		BootstrappingLit.LogN = utils.Pointy(ResidualLit.LogN)
 	}
 
 	//==============================
 	//=== 1) RESIDUAL PARAMETERS ===
 	//==============================
 
-	// First we must define the residual parameters.
-	// The residual parameters are the parameters used outside of the bootstrapping circuit.
-	params, err := hefloat.NewParametersFromLiteral(hefloat.ParametersLiteral{
-		LogN:            LogN,                                  // Log2 of the ring degree
-		LogQ:            []int{45, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35}, // Log2 of the ciphertext prime moduli
-		LogP:            []int{55, 40, 40},                     // Log2 of the key-switch auxiliary prime moduli
-		LogDefaultScale: 35,                                    // Log2 of the scale
-	})
+	params, err := hefloat.NewParametersFromLiteral(ResidualLit)
 
 	if err != nil {
 		panic(err)
@@ -57,56 +116,11 @@ func main() {
 	//=== 2) BOOTSTRAPPING PARAMETERSLITERAL ===
 	//==========================================
 
-	// The bootstrapping circuit use its own Parameters
-	// which will be automatically instantiated given
-	// the residual parameters and the bootstrapping parameters.
-
-	// !WARNING! The bootstrapping parameters are not ensured to
-	// be 128-bit secure, it is the responsibility of the user
-	// to check that the meet the security requirement and tweak
-	// them if necessary.
-
-	// In this example we need to specify multiple advanced parameters
-	// for the bootstrapping to work since we are constrainted to use
-	// a secret with density 2/3.
-	btpParametersLit := bootstrapping.ParametersLiteral{
-		// We specify LogN to ensure that both the residual
-		// parameters and the bootstrapping parameters have
-		// the same LogN. This is not required, but we want
-		// it for this example.
-		LogN: utils.Pointy(LogN),
-
-		// In this example we manually specify the
-		// bootstrapping parameters' secret distribution.
-		// This is not necessary, but we ensure here that
-		// they are the same as the residual parameters.
-		Xs: params.Xs(),
-
-		// By default the Sparse-Secret Encapsulation technique of
-		// https://eprint.iacr.org/2022/024 is used, so we manually
-		// set it to 0 to not use it.
-		EphemeralSecretWeight: utils.Pointy(0),
-
-		// The default values for the following fields is set for
-		// an expected precision of ~27.5 bits, however since we are
-		// constrained to a dense secrete, the values can be reduced
-		// to gain some more homomorphic capacity to allocate to the
-		// residual parameters.
-		SlotsToCoeffsFactorizationDepthAndLogScales: [][]int{{30}, {30}, {30}},
-
-		// Since we use a secret distribution of density 2/3
-		// (i.e. Hamming weight ~43691) we need to specify
-		// custom paramters for the homomorphic modular reduction.
-		// We set K to ceil(2.281*sqrt(2N/3))=477 to achieve < 2^{-32}
-		// failure probability with 2^{15} complex slots.
-		// This value for K can be obtained with failure.FindSuitableK(43691, 15, -32).
-		K: utils.Pointy(487),
-		// We then need adapt the approximation of the homomorphic
-		// modular reduction accordingly.
-		Mod1Type:    hefloat.CosContinuous,
-		Mod1Degree:  utils.Pointy(255),
-		DoubleAngle: utils.Pointy(4),
-	}
+	// We can estimate the bootstrapping failure probability with:
+	fmt.Println("==== FAILURE PROBABILITY ====")
+	pr := failure.Probability(params.Xs(), *BootstrappingLit.K, params.LogN(), params.LogMaxSlots())
+	fmt.Printf("Failure Probability given K=%d: 2^{%f}\n", *BootstrappingLit.K, pr)
+	fmt.Println("=============================")
 
 	//===================================
 	//=== 3) BOOTSTRAPPING PARAMETERS ===
@@ -120,7 +134,7 @@ func main() {
 	// with additional information.
 	// They therefore has the same API as the hefloat.Parameters
 	// and we can use this API to print some information.
-	btpParams, err := bootstrapping.NewParametersFromLiteral(params, btpParametersLit)
+	btpParams, err := bootstrapping.NewParametersFromLiteral(params, BootstrappingLit)
 	if err != nil {
 		panic(err)
 	}
@@ -194,7 +208,7 @@ func main() {
 	slots := params.MaxSlots()
 	valuesWant := make([]complex128, params.MaxSlots())
 	for i := range valuesWant {
-		valuesWant[i] = complex(float64(i) / float64(slots-1), float64(i) / float64(slots-1))
+		valuesWant[i] = complex(float64(i)/float64(slots-1), float64(i)/float64(slots-1))
 	}
 
 	// We encrypt at level 0
