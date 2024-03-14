@@ -1,192 +1,71 @@
-# Table 4.9
+# Table 5.4 BFV / BGV without bootstrapping
 
-param_functional_16384_classic_128 = LWE.Parameters(
+bfvbgv_nobootstrap_16384_classic_128 = LWE.Parameters(
     n = 16384,
     q = 2**424,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_16384_classic_128"
+    tag = "bfvbgv_nobootstrap_16384_classic"
 )
 
-param_functional_16384_quantum_128 = LWE.Parameters(
+bfvbgv_nobootstrap_16384_quantum_128 = LWE.Parameters(
     n = 16384,
     q = 2**391,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_16384_quantum_128"
+    tag = "bfvbgv_nobootstrap_16384_quantum_128"
 )
 
-param_functional_16384_classic_192 = LWE.Parameters(
-    n = 16384,
-    q = 2**285,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_16384_classic_192"
-)
-
-param_functional_16384_quantum_192 = LWE.Parameters(
-    n = 16384,
-    q = 2**285,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_16384_quantum_192"
-)
-
-param_functional_16384_classic_256 = LWE.Parameters(
-    n = 16384,
-    q = 2**225,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_16384_classic_256"
-)
-
-param_functional_16384_quantum_256 = LWE.Parameters(
-    n = 16384,
-    q = 2**215,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_16384_quantum_256"
-)
-
-param_functional_32768_classic_128 = LWE.Parameters(
-    n = 32768,
-    q = 2**855,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_32768_classic_128"
-)
-
-param_functional_32768_quantum_128 = LWE.Parameters(
-    n = 32768,
-    q = 2**815,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_32768_quantum_128"
-)
-
-param_functional_32768_classic_192 = LWE.Parameters(
+bfvbgv_nobootstrap_32768_classic_192 = LWE.Parameters(
     n = 32768,
     q = 2**585,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_32768_classic_192"
+    tag = "bfvbgv_nobootstrap_32768_classic_192"
 )
 
-param_functional_32768_quantum_192 = LWE.Parameters(
+bfvbgv_nobootstrap_32768_quantum_192 = LWE.Parameters(
     n = 32768,
-    q = 2**572,
+    q = 2**562,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_32768_quantum_192"
+    tag = "bfvbgv_nobootstrap_32768_quantum_192"
 )
 
-param_functional_32768_classic_256 = LWE.Parameters(
-    n = 32768,
-    q = 2**455,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_32768_classic_256"
-)
-
-param_functional_32768_quantum_256 = LWE.Parameters(
-    n = 32768,
-    q = 2**435,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_32768_quantum_256"
-)
-
-param_functional_65536_classic_128 = LWE.Parameters(
+bfvbgv_nobootstrap_65536_classic_256 = LWE.Parameters(
     n = 65536,
-    q = 2**1730,
+    q = 2**920,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_65536_classic_128"
+    tag = "bfvbgv_nobootstrap_65536_classic_256"
 )
 
-param_functional_65536_quantum_128 = LWE.Parameters(
-    n = 65536,
-    q = 2**1640,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_65536_quantum_128"
-)
-
-param_functional_65536_classic_192 = LWE.Parameters(
-    n = 65536,
-    q = 2**1180,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_65536_classic_192"
-)
-
-param_functional_65536_quantum_192 = LWE.Parameters(
-    n = 65536,
-    q = 2**1120,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_65536_quantum_192"
-)
-
-param_functional_65536_classic_256 = LWE.Parameters(
-    n = 65536,
-    q = 2**930,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_65536_classic_256"
-)
-
-param_functional_65536_quantum_256 = LWE.Parameters(
+bfvbgv_nobootstrap_65536_quantum_256 = LWE.Parameters(
     n = 65536,
     q = 2**880,
     Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_65536_quantum_256"
+    tag = "bfvbgv_nobootstrap_65536_quantum_256"
 )
 
-
-Table_4_8 = [
-    (param_functional_16384_classic_128, 128, classic_model),
-    (param_functional_16384_quantum_128, 128, quantum_model),
-    (param_functional_16384_classic_192, 192, classic_model),
-    (param_functional_16384_quantum_192, 192, quantum_model),
-    (param_functional_16384_classic_256, 256, classic_model),
-    (param_functional_16384_quantum_256, 256, quantum_model),
-    (param_functional_32768_classic_128, 128, classic_model),
-    (param_functional_32768_quantum_128, 128, quantum_model),
-    (param_functional_32768_classic_192, 192, classic_model),
-    (param_functional_32768_quantum_192, 192, quantum_model),
-    (param_functional_32768_classic_256, 256, classic_model),
-    (param_functional_32768_quantum_256, 256, quantum_model),
-    (param_functional_65536_classic_128, 128, classic_model),
-    (param_functional_65536_quantum_128, 128, quantum_model),
-    (param_functional_65536_classic_192, 192, classic_model),
-    (param_functional_65536_quantum_192, 192, quantum_model),
-    (param_functional_65536_classic_256, 256, classic_model),
-    (param_functional_65536_quantum_256, 256, quantum_model)
+Table_5_4 = [
+    (bfvbgv_nobootstrap_16384_classic_128, 128, classic_model),
+    (bfvbgv_nobootstrap_16384_quantum_128, 128, quantum_model),
+    (bfvbgv_nobootstrap_32768_classic_128, 192, classic_model),
+    (bfvbgv_nobootstrap_32768_quantum_128, 192, quantum_model),
+    (bfvbgv_nobootstrap_65536_classic_128, 256, classic_model),
+    (bfvbgv_nobootstrap_65536_quantum_128, 256, quantum_model),
 ]
 
-# Table 4.9
+# Table 5.5
 
-param_functional_tfhe_742_binary_classic_128 = LWE.Parameters(
+tfhe_742_classic_128 = LWE.Parameters(
     n = 742,
     q = 2**64,
     Xs = ND.UniformMod(2),
@@ -195,127 +74,176 @@ param_functional_tfhe_742_binary_classic_128 = LWE.Parameters(
     tag = "param_functional_tfhe_742_binary_classic_128"
 )
 
-param_functional_tfhe_2048_binary_classic_128 = LWE.Parameters(
+tfhe_2048_classic_128 = LWE.Parameters(
     n = 2048,
     q = 2**64,
     Xs = ND.UniformMod(2),
     Xe = ND.DiscreteGaussian(2**(-51.6) * 2**64),
     m = oo,
-    tag = "param_functional_tfhe_2048_binary_classic_128"
+    tag = "tfhe_2048_classic_128"
 )
 
-param_functional_tfhe_777_binary_classic_128 = LWE.Parameters(
+tfhe_777_classic_128 = LWE.Parameters(
     n = 777,
     q = 2**64,
     Xs = ND.UniformMod(2),
     Xe = ND.DiscreteGaussian(2**(-18.03) * 2**64),
     m = oo,
-    tag = "param_functional_tfhe_777_binary_classic_128"
+    tag = "tfhe_777_classic_128"
 )
 
-param_functional_tfhe_1536_binary_classic_128 = LWE.Parameters(
+tfhe_1536_classic_128 = LWE.Parameters(
     n = 512 * 3,
     q = 2**64,
     Xs = ND.UniformMod(2),
     Xe = ND.DiscreteGaussian(2**(-38.08) * 2**64),
     m = oo,
-    tag = "param_functional_tfhe_1536_binary_classic_128"
+    tag = "tfhe_1536_classic_128"
 )
 
-Table_4_9 = [
-    (param_functional_tfhe_742_binary_classic_128, 128, classic_model),
-    (param_functional_tfhe_2048_binary_classic_128, 128, classic_model),
-    (param_functional_tfhe_777_binary_classic_128, 128, classic_model),
-    (param_functional_tfhe_1536_binary_classic_128, 128, classic_model)
+tfhe_630_classic_128 = LWE.Parameters(
+    n = 630,
+    q = 2**32,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**(-15) * 2**32),
+    m = oo,
+    tag = "tfhe_630_classic_128")
+
+
+tfhe_1024_classic_128 = LWE.Parameters(
+    n = 1024,
+    q = 2**32,
+    Xs = ND.UniformMod(2),
+    Xe = ND.DiscreteGaussian(2**(-25) * 2**32),
+    m = oo,
+    tag = "tfhe_1024_classic_128")
+
+tfhe_512_classic_128 = LWE.Parameters(
+    n = 512,
+    q = 2**27,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.2),
+    m = oo,
+    tag = "tfhe_512_classic_128")
+
+tfhe_1024_classic_128_27 = LWE.Parameters(
+    n = 1024,
+    q = 2**27,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.2),
+    m = oo,
+    tag = "tfhe_1024_classic_128_27")
+
+Table_5_5 = [
+    (tfhe_742_classic_128, 128, classic_model),
+    (tfhe_2048_classic_128, 128, classic_model),
+    (tfhe_777_classic_128, 128, classic_model),
+    (tfhe_1536_classic_128, 128, classic_model),
+    (tfhe_630_classic_128, 128, classic_model),
+    (tfhe_1024_classic_128, 128, classic_model),
+    (tfhe_512_classic_128, 128, classic_model),
+    (tfhe_1024_classic_128_27, 128, classic_model)
 ]
 
-#Table 4.10
+#Table 5.6
 
-param_functional_131072_ternary128_classic_128 = LWE.Parameters(
-    n = 131072,
-    q = 2**2292,
-    Xs = ND.SparseTernary(131072, 64, 64),
+ckks_nobootstrap_16384_classic_128 = LWE.Parameters(
+    n = 16384,
+    q = 2**426,
+    Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_131072_ternary128_classic_128"
+    tag = "ckks_nobootstrap_16384_classic_128"
 )
 
-param_functional_131072_ternary64_classic_128 = LWE.Parameters(
-    n = 131072,
-    q = 2**1937,
-    Xs = ND.SparseTernary(131072, 32, 32),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_131072_ternary64_classic_128"
-)
-
-Table_4_10 = [
-    (param_functional_131072_ternary128_classic_128, 128, classic_model),
-    (param_functional_131072_ternary64_classic_128, 128, quantum_model)
-]
-
-# Table 4.11
-
-param_functional_32768_ternary21845_classic_128 = LWE.Parameters(
+ckks_nobootstrap_32768_classic_192 = LWE.Parameters(
     n = 32768,
-    q = 2**866,
-    Xs = ND.SparseTernary(32768, 10922, 10923),
+    q = 2**602,
+    Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_32768_ternary21845_classic_128"
+    tag = "ckks_nobootstrap_32768_classic_192"
 )
 
-param_functional_65536_ternary8192_classic_192 = LWE.Parameters(
-    n = 65536,
-    q = 2**1206,
-    Xs = ND.SparseTernary(65536, 4096, 4096),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_65536_ternary8192_classic_192"
-)
-
-param_functional_65536_ternary8192_classic_256 = LWE.Parameters(
-    n = 65536,
-    q = 2**918,
-    Xs = ND.SparseTernary(65536, 4096, 4096),
-    Xe = ND.DiscreteGaussian(3.19),
-    m = oo,
-    tag = "param_functional_65536_ternary21845_classic_256"
-)
-
-param_functional_32768_ternary21845_quantum_128 = LWE.Parameters(
+ckks_nobootstrap_32768_classic_256 = LWE.Parameters(
     n = 32768,
-    q = 2**825,
-    Xs = ND.SparseTernary(32768, 10922, 10923),
+    q = 2**472,
+    Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_32768_ternary21845_quantum_128"
+    tag = "ckks_nobootstrap_32768_classic_256"
 )
 
-param_functional_65536_ternary8192_quantum_192 = LWE.Parameters(
-    n = 65536,
-    q = 2**1139,
-    Xs = ND.SparseTernary(65536, 4096, 4096),
+ckks_nobootstrap_16384_quantum_128 = LWE.Parameters(
+    n = 16384,
+    q = 2**388,
+    Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_65536_ternary8192_quantum_192"
+    tag = "ckks_nobootstrap_16384_classic_128"
 )
 
-param_functional_65536_ternary8192_quantum_256 = LWE.Parameters(
-    n = 65536,
-    q = 2**866,
-    Xs = ND.SparseTernary(65536, 4096, 4096),
+ckks_nobootstrap_32768_quantum_192 = LWE.Parameters(
+    n = 32768,
+    q = 2**560,
+    Xs = ND.UniformMod(3),
     Xe = ND.DiscreteGaussian(3.19),
     m = oo,
-    tag = "param_functional_65536_ternary21845_quantum_256"
+    tag = "ckks_nobootstrap_32768_classic_192"
 )
 
-Table_4_11 = [
-    (param_functional_32768_ternary21845_classic_128, 128, classic_model),
-    (param_functional_65536_ternary8192_classic_192, 192, classic_model),
-    (param_functional_65536_ternary8192_classic_256, 256, classic_model),
-    (param_functional_32768_ternary21845_quantum_128, 128, quantum_model),
-    (param_functional_65536_ternary8192_quantum_192, 192, quantum_model),
-    (param_functional_65536_ternary8192_quantum_256, 256, quantum_model)
+ckks_nobootstrap_32768_quantum_256 = LWE.Parameters(
+    n = 32768,
+    q = 2**434,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "ckks_nobootstrap_32768_classic_256"
+)
+
+Table_5_6 = [
+    (ckks_nobootstrap_16384_classic_128, 128, classic_model),
+    (ckks_nobootstrap_32768_classic_192, 192, classic_model),
+    (ckks_nobootstrap_32768_classic_256, 256, classic_model),
+    (ckks_nobootstrap_16384_quantum_128, 128, quantum_model),
+    (ckks_nobootstrap_32768_quantum_192, 192, quantum_model),
+    (ckks_nobootstrap_32768_quantum_256, 256, quantum_model),
 ]
+
+
+#Table 5.7
+
+ckks_bootstrap_65536_classic_128_1 = LWE.Parameters(
+    n = 65536,
+    q = 2**1769,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "ckks_bootstrap_65536_classic_128"
+)
+
+ckks_bootstrap_65536_classic_128_2 = LWE.Parameters(
+    n = 65536,
+    q = 2**1750,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "ckks_bootstrap_65536_classic_128"
+)
+
+ckks_bootstrap_131072_classic_192 = LWE.Parameters(
+    n = 131072,
+    q = 2**2425,
+    Xs = ND.UniformMod(3),
+    Xe = ND.DiscreteGaussian(3.19),
+    m = oo,
+    tag = "ckks_bootstrap_131072_classic_128"
+)
+
+Table_5_7 = [
+    (ckks_bootstrap_65536_classic_128_1, 128, classic_model),
+    (ckks_bootstrap_65536_classic_128_2, 128, classic_model),
+    (ckks_bootstrap_131072_classic_192, 192, classic_model),
+]
+
 
