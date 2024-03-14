@@ -1,3 +1,9 @@
+import sys
+sys.path.insert(1, 'lattice-estimator')
+from estimator import *
+
+classic_model = RC.BDGL16
+
 # Table 5.4 BFV / BGV without bootstrapping
 
 bfvbgv_nobootstrap_16384_classic_128 = LWE.Parameters(
