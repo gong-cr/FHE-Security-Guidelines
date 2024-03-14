@@ -3,6 +3,7 @@ sys.path.insert(1, 'lattice-estimator')
 from estimator import *
 
 classic_model = RC.BDGL16
+quantum_model = RC.LaaMosPol14
 
 # Table 5.4 BFV / BGV without bootstrapping
 
