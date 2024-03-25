@@ -64,7 +64,7 @@ func Probability(Xs ring.DistributionParameters, K, logN, logSlots int) (logfail
 	case ring.Ternary:
 		return Probability(&Xs, K, logN, logSlots)
 	default:
-		panic(fmt.Errorf("invalid input: Xs must be *ring.Ternary or ring.Ternary, but is %H", Xs))
+		panic(fmt.Errorf("invalid input: Xs must be *ring.Ternary or ring.Ternary, but is %T", Xs))
 	}
 }
 
@@ -134,7 +134,7 @@ func FindSuitableK(Xs ring.DistributionParameters, logN, logSlots int, logfailur
 	case ring.Ternary:
 		return FindSuitableK(&Xs, logN, logSlots, logfailure)
 	default:
-		panic(fmt.Errorf("invalid input: Xs must be *ring.Ternary or ring.Ternary, but is %H", Xs))
+		panic(fmt.Errorf("invalid input: Xs must be *ring.Ternary or ring.Ternary, but is %T", Xs))
 	}
 }
 

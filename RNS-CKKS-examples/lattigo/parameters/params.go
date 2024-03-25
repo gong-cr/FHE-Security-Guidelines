@@ -16,6 +16,9 @@ const (
 	Quantum   = SecurityType(1)
 )
 
+// AssertSecurity asserts the security of the provided [hefloat.Parameters] according to the
+// security parameter 2^{lambda} and security type [Classical] or [Quantum].
+// A descriptive error is returned if the parameters do not meet the target security.
 func AssertSecurity(p hefloat.Parameters, lambda int, securityType SecurityType) (err error) {
 
 	var Table map[int]map[int]int
@@ -68,6 +71,7 @@ func AssertSecurity(p hefloat.Parameters, lambda int, securityType SecurityType)
 	return
 }
 
+// Infos prints information about the parameters.
 func Infos(p hefloat.Parameters) string {
 	return fmt.Sprintf(`LogN: %d 
 Secret Key Distribution: %T - Density: %v
@@ -89,12 +93,19 @@ Log2(Scaling Factor): %d`,
 		p.LogDefaultScale())
 }
 
+// ParameterInfos is a struct storing informations about the parameters:
+// - Name: Params[N]Ternary[Classic/Quantum][Lambda]
+// - Lambda: security (bits) of the parameters
+// - SecurityType: [Classical] or [Quantum]
 type ParameterInfos struct {
 	Name         string
 	Lambda       int
 	SecurityType SecurityType
 }
 
+// ParametersInfosList stores a list of example parameters
+// ranging from N=2^15 to N=2^16, classical and quantum secure
+// Lambda [128, 192, 256].
 var ParametersInfosList = []ParameterInfos{
 	{"Params32768TernaryClassic128", 128, Classical},
 	{"Params32768TernaryClassic192", 192, Classical},
@@ -110,6 +121,9 @@ var ParametersInfosList = []ParameterInfos{
 	{"Params65536TernaryQuantum256", 256, Quantum},
 }
 
+// ParametersList is a list of example parameters stored in a map indexed
+// by their name that provide a concrete instantiation of the [ParameterInfos]
+// listed in [ParametersInfosList].
 var ParametersList = map[string]hefloat.ParametersLiteral{
 
 	"Params32768TernaryClassic128": {

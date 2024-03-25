@@ -6,6 +6,8 @@ import (
 	"github.com/tuneinsight/lattigo/v5/he/hefloat"
 )
 
+// TestExampleParams checks that all parameters listed
+// in ParametersInfosList meet their security target.
 func TestExampleParams(t *testing.T) {
 
 	for _, paramsInfos := range ParametersInfosList {
