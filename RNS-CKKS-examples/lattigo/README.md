@@ -7,7 +7,7 @@ It implements code for [Lattigo](https://github.com/tuneinsight/lattigo) to asse
 ## SETUP
 
 1. Install Go: https://go.dev/
-2. Check that Go was installed properly added to the `PATH` with `$ go version`
+2. Check that Go was installed properly and added to the `PATH` with `$ go version`
 3. Clone the repository https://github.com/gong-cr/FHE-Security-Guidelines
 4. `$ cd RNS-CKKS-examples/lattigo`
 5. `$ go test ./...` (this will run the tests and download all the dependencies)
