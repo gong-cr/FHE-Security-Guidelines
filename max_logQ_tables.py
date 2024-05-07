@@ -152,19 +152,21 @@ def process_maxlogq(estimators, n_dim, secret_dist, error_dist, security_target,
     return min(logq_list)
 
 secret = {MODE_TERNARY: "ternary", MODE_GAUSSIAN: "Gaussian"}
-for security_thres in [128, 192, 256]:
-    security_target = security_thres + security_margin
-    print(f"security threshold = {security_thres}, margin = {security_margin}, target = {security_target}")
-    for n_dim in n_list:
-        if n_dim < 2048 and security_target > 130:
+
+if __name__ == "__main__":
+    security_thres = int(sys.argv[1])
+
+security_target = security_thres + security_margin
+print(f"security threshold = {security_thres}, margin = {security_margin}, target = {security_target}")
+for n_dim in n_list:
+    if n_dim < 2048 and security_target > 130:
             continue
-        print(f"dim = {n_dim}")
-        for power in ["classical", "quantum"]:
-            for secret_mode in [MODE_TERNARY, MODE_GAUSSIAN]:
-                estimators = get_estimators_for_mode(secret_mode, power)
-                logq = process_maxlogq(estimators, n_dim, secret_mode, error_dist, security_target, power)
-                        
-                print(f"{power} {secret[secret_mode]}, max logq = {logq}")
-        print("-------------------------------------")
+    print(f"dim = {n_dim}")
+    for power in ["classical", "quantum"]:
+        for secret_mode in [MODE_TERNARY, MODE_GAUSSIAN]:
+            estimators = get_estimators_for_mode(secret_mode, power)
+            logq = process_maxlogq(estimators, n_dim, secret_mode, error_dist, security_target, power)
+            print(f"{power} {secret[secret_mode]}, max logq = {logq}")
+    print("-------------------------------------")
 
 
