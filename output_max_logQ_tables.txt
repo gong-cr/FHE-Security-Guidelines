@@ -1,0 +1,195 @@
+MAIN:
+security threshold = 128, margin = 0, target = 128
+dim = 1024
+classical ternary, max logq = 26
+classical Gaussian, max logq = 29
+quantum ternary, max logq = 25
+quantum Gaussian, max logq = 27
+-------------------------------------
+dim = 2048
+classical ternary, max logq = 53
+classical Gaussian, max logq = 55
+quantum ternary, max logq = 50
+quantum Gaussian, max logq = 53
+-------------------------------------
+dim = 4096
+classical ternary, max logq = 107
+classical Gaussian, max logq = 109
+quantum ternary, max logq = 101
+quantum Gaussian, max logq = 103
+-------------------------------------
+dim = 8192
+
+DEBUG: (8192, 217, D(σ=0.82), D(σ=3.19))
+
+security threshold = 192, margin = 0, target = 192
+
+dim = 2048
+classical ternary, max logq = 36
+classical Gaussian, max logq = 38
+quantum ternary, max logq = 34
+quantum Gaussian, max logq = 37
+-------------------------------------
+dim = 4096
+classical ternary, max logq = 73
+classical Gaussian, max logq = 75
+quantum ternary, max logq = 69
+quantum Gaussian, max logq = 72
+-------------------------------------
+dim = 8192
+
+DEBUG: (8192, 151, D(σ=0.82), D(σ=3.19))
+
+security threshold = 256, margin = 0, target = 256
+dim = 2048
+classical ternary, max logq = 27
+classical Gaussian, max logq = 30
+quantum ternary, max logq = 26
+quantum Gaussian, max logq = 29
+-------------------------------------
+dim = 4096
+classical ternary, max logq = 56
+classical Gaussian, max logq = 59
+quantum ternary, max logq = 53
+quantum Gaussian, max logq = 56
+-------------------------------------
+dim = 8192
+
+DEBUG: (8192, 117, D(σ=0.82), D(σ=3.19))
+
+HES_table branch:
+security threshold = 128, margin = 0, target = 128
+dim = 1024
+classical ternary, max logq = 26
+classical Gaussian, max logq = 29
+quantum ternary, max logq = 25
+quantum Gaussian, max logq = 27
+-------------------------------------
+dim = 2048
+classical ternary, max logq = 53
+classical Gaussian, max logq = 55
+quantum ternary, max logq = 50
+quantum Gaussian, max logq = 53
+-------------------------------------
+dim = 4096
+classical ternary, max logq = 107
+classical Gaussian, max logq = 109
+quantum ternary, max logq = 101
+quantum Gaussian, max logq = 103
+-------------------------------------
+dim = 8192
+classical ternary, max logq = 214
+classical Gaussian, max logq = 216
+quantum ternary, max logq = 203
+quantum Gaussian, max logq = 206
+-------------------------------------
+dim = 16384
+classical ternary, max logq = 431
+classical Gaussian, max logq = 433
+quantum ternary, max logq = 409
+quantum Gaussian, max logq = 412
+-------------------------------------
+dim = 32768
+classical ternary, max logq = 868
+classical Gaussian, max logq = 870
+quantum ternary, max logq = 825
+quantum Gaussian, max logq = 828
+-------------------------------------
+dim = 65536
+classical ternary, max logq = 1747
+classical Gaussian, max logq = 1749
+quantum ternary, max logq = 1663
+quantum Gaussian, max logq = 1666
+-------------------------------------
+dim = 131072
+classical ternary, max logq = 3523
+classical Gaussian, max logq = 3525
+quantum ternary, max logq = 3349
+quantum Gaussian, max logq = 3351
+-------------------------------------
+security threshold = 192, margin = 0, target = 192
+dim = 2048
+classical ternary, max logq = 36
+classical Gaussian, max logq = 38
+quantum ternary, max logq = 34
+quantum Gaussian, max logq = 37
+-------------------------------------
+dim = 4096
+classical ternary, max logq = 73
+classical Gaussian, max logq = 75
+quantum ternary, max logq = 69
+quantum Gaussian, max logq = 72
+-------------------------------------
+dim = 8192
+classical ternary, max logq = 148
+classical Gaussian, max logq = 150
+quantum ternary, max logq = 140
+quantum Gaussian, max logq = 143
+-------------------------------------
+dim = 16384
+classical ternary, max logq = 297
+classical Gaussian, max logq = 299
+quantum ternary, max logq = 283
+quantum Gaussian, max logq = 286
+-------------------------------------
+dim = 32768
+classical ternary, max logq = 597
+classical Gaussian, max logq = 599
+quantum ternary, max logq = 570
+quantum Gaussian, max logq = 572
+-------------------------------------
+dim = 65536
+classical ternary, max logq = 1199
+classical Gaussian, max logq = 1201
+quantum ternary, max logq = 1145
+quantum Gaussian, max logq = 1147
+-------------------------------------
+dim = 131072
+classical ternary, max logq = 2411
+classical Gaussian, max logq = 2413
+quantum ternary, max logq = 2301
+quantum Gaussian, max logq = 2304
+-------------------------------------
+security threshold = 256, margin = 0, target = 256
+dim = 2048
+classical ternary, max logq = 27
+classical Gaussian, max logq = 30
+quantum ternary, max logq = 26
+quantum Gaussian, max logq = 29
+-------------------------------------
+dim = 4096
+classical ternary, max logq = 56
+classical Gaussian, max logq = 59
+quantum ternary, max logq = 53
+quantum Gaussian, max logq = 56
+-------------------------------------
+dim = 8192
+classical ternary, max logq = 114
+classical Gaussian, max logq = 116
+quantum ternary, max logq = 108
+quantum Gaussian, max logq = 111
+-------------------------------------
+dim = 16384
+classical ternary, max logq = 230
+classical Gaussian, max logq = 232
+quantum ternary, max logq = 219
+quantum Gaussian, max logq = 222
+-------------------------------------
+dim = 32768
+classical ternary, max logq = 463
+classical Gaussian, max logq = 465
+quantum ternary, max logq = 442
+quantum Gaussian, max logq = 445
+-------------------------------------
+dim = 65536
+classical ternary, max logq = 929
+classical Gaussian, max logq = 931
+quantum ternary, max logq = 888
+quantum Gaussian, max logq = 891
+-------------------------------------
+dim = 131072
+classical ternary, max logq = 1866
+classical Gaussian, max logq = 1868
+quantum ternary, max logq = 1784
+quantum Gaussian, max logq = 1786
+-------------------------------------
