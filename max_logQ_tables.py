@@ -13,7 +13,7 @@ MODE_GAUSSIAN = ND.DiscreteGaussian(stddev=3.19, mean=0, n=None)
 
 error_dist = ND.DiscreteGaussian(stddev=3.19, mean=0, n=None)
 secret_mode = MODE_TERNARY # MODE_TERNARY or MODE_GAUSSIAN
-cost_model_classical = RC.BDGL16
+cost_model_classical = RC.MATZOV
 cost_model_quantum = RC.LaaMosPol14
 m = oo
 security_margin = 0
@@ -76,7 +76,10 @@ def get_estimators_for_mode(secret_mode, power_setting):
 def cost_estimating(estimator, logq, n_dim, secret_dist, error_dist):
     instance = LWE.Parameters(n=n_dim, q=2**logq, Xs=secret_dist, Xe=error_dist, m=m)
     # start_time = time.time()
-    # print(F"DEBUG: {n_dim, logq, secret_dist, error_dist}")
+    print(F"DEBUG: {n_dim, logq, secret_dist, error_dist}")
+    # output_file = "output_max_logQ_tables.txt"
+    # with open(output_file, 'a') as f:
+    #     f.write(f"DEBUG: {n_dim, logq, secret_dist, error_dist}\n")
     attack_costs = estimator(params=instance)
     # end_time = time.time()
     # elapsed_time = end_time - start_time
@@ -129,13 +132,13 @@ def logq_search_interval(estimator, n_dim, secret_mode, error_dist, security_tar
                 break
             else:
                 logq_right += logq_interval
-    print(f"DEBUG: search range: {logq_left, logq_right}")
+    # print(f"DEBUG: search range: {logq_left, logq_right}")
     return logq_left, logq_right
 
 def maxlogq_finder(estimator, n_dim, secret_dist, error_dist, security_target, power_setting):
     """Find the specific maximal logq for a given estimator and parameters."""
     # print("Using estimator:", estimator)
-    logq_initial = initial_log_q(n_dim, secret_dist, security_thres, power_setting)
+    logq_initial = initial_log_q(n_dim, secret_dist, security_target, power_setting)
     # Determine secret distribution based on mode
     logq_left, logq_right = logq_search_interval(estimator, n_dim, secret_dist, error_dist, security_target, logq_initial)
     maxlogq = binary_search(estimator, n_dim, secret_dist, error_dist, security_target, logq_left, logq_right)
@@ -153,20 +156,41 @@ def process_maxlogq(estimators, n_dim, secret_dist, error_dist, security_target,
 
 secret = {MODE_TERNARY: "ternary", MODE_GAUSSIAN: "Gaussian"}
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+#     security_thres = int(sys.argv[1])
+
+# security_target = security_thres + security_margin
+# print(f"security threshold = {security_thres}, margin = {security_margin}, target = {security_target}")
+# for n_dim in n_list:
+#     if n_dim < 2048 and security_target > 130:
+#         continue
+#     print(f"dim = {n_dim}")
+#     for power in ["classical", "quantum"]:
+#         for secret_mode in [MODE_TERNARY, MODE_GAUSSIAN]:
+#             estimators = get_estimators_for_mode(secret_mode, power)
+#             logq = process_maxlogq(estimators, n_dim, secret_mode, error_dist, security_target, power)
+#             print(f"{power} {secret[secret_mode]}, max logq = {logq}")
+#     print("-------------------------------------")
+
+
+def main():
     security_thres = int(sys.argv[1])
+    security_target = security_thres + security_margin
+    output_file = "output_max_logQ_tables.txt"
 
-security_target = security_thres + security_margin
-print(f"security threshold = {security_thres}, margin = {security_margin}, target = {security_target}")
-for n_dim in n_list:
-    if n_dim < 2048 and security_target > 130:
-            continue
-    print(f"dim = {n_dim}")
-    for power in ["classical", "quantum"]:
-        for secret_mode in [MODE_TERNARY, MODE_GAUSSIAN]:
-            estimators = get_estimators_for_mode(secret_mode, power)
-            logq = process_maxlogq(estimators, n_dim, secret_mode, error_dist, security_target, power)
-            print(f"{power} {secret[secret_mode]}, max logq = {logq}")
-    print("-------------------------------------")
+    with open(output_file, 'a') as f:
+        print(f"security threshold = {security_thres}, margin = {security_margin}, target = {security_target}")
+        f.write(f"security threshold = {security_thres}, margin = {security_margin}, target = {security_target}\n")
+        for n_dim in n_list:
+            if n_dim < 2048 and security_target > 130:
+                continue
+            f.write(f"dim = {n_dim}\n")
+            for power in ["classical", "quantum"]:
+                for secret_mode in [MODE_TERNARY, MODE_GAUSSIAN]:
+                    estimators = get_estimators_for_mode(secret_mode, power)
+                    logq = process_maxlogq(estimators, n_dim, secret_mode, error_dist, security_target, power)
+                    f.write(f"{power} {secret[secret_mode]}, max logq = {logq}\n")
+            f.write("-------------------------------------\n")
 
-
+if __name__ == "__main__":
+    main()
