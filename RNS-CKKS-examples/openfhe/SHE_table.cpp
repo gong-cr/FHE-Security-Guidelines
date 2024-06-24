@@ -38,12 +38,12 @@
 #include "openfhe.h"
 
 using namespace lbcrypto;
-void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth);
+void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth, SecurityLevel secLevel);
 
 // CalculateApproximationError() calculates the precision number (or approximation error).
 // The higher the precision, the less the error.
 double CalculateApproximationError(const std::vector<std::complex<double>>& result,
-                                    const std::vector<std::complex<double>>& expectedResult) {
+                                   const std::vector<std::complex<double>>& expectedResult) {
     if (result.size() != expectedResult.size())
         OPENFHE_THROW(config_error, "Cannot compare vectors with different numbers of elements");
 
@@ -57,68 +57,67 @@ double CalculateApproximationError(const std::vector<std::complex<double>>& resu
 }
 
 int main(int argc, char* argv[]) {
-    //SetII
+    // SetII
     std::cout << "====================RNS-CKKS without Bootstrapping====================" << std::endl;
     std::cout << "--------------------COLUMN 1--------------------" << std::endl;
-    uint32_t ringDim  = 1 << 14;
-    usint dcrtBits    = 38;
-    usint firstMod    = 40; 
-    usint depth = 7;
-    SHEExample(ringDim, dcrtBits, firstMod, depth);
+    uint32_t ringDim = 1 << 14;
+    usint dcrtBits   = 38;
+    usint firstMod   = 40;
+    usint depth      = 7;
+    SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_128_classic);
 
     std::cout << "--------------------COLUMN 2--------------------" << std::endl;
     ringDim  = 1 << 15;
-    dcrtBits    = 42;
-    firstMod    = 44; 
-    depth = 9;
-    SHEExample(ringDim, dcrtBits, firstMod, depth);
+    dcrtBits = 42;
+    firstMod = 44;
+    depth    = 9;
+    SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_192_classic);
 
     std::cout << "--------------------COLUMN 3--------------------" << std::endl;
     ringDim  = 1 << 15;
-    dcrtBits    = 39;
-    firstMod    = 40; 
-    depth = 8;
-    SHEExample(ringDim, dcrtBits, firstMod, depth);
+    dcrtBits = 39;
+    firstMod = 40;
+    depth    = 8;
+    SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_256_classic);
 
     std::cout << "--------------------COLUMN 4--------------------" << std::endl;
     ringDim  = 1 << 14;
-    dcrtBits    = 38;
-    firstMod    = 40; 
-    depth = 6;
-    SHEExample(ringDim, dcrtBits, firstMod, depth);
+    dcrtBits = 38;
+    firstMod = 40;
+    depth    = 6;
+    SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_128_quantum);
 
     std::cout << "--------------------COLUMN 5--------------------" << std::endl;
     ringDim  = 1 << 15;
-    dcrtBits    = 42;
-    firstMod    = 44; 
-    depth = 8;
-    SHEExample(ringDim, dcrtBits, firstMod, depth);
+    dcrtBits = 42;
+    firstMod = 44;
+    depth    = 8;
+    SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_192_quantum);
 
     std::cout << "--------------------COLUMN 6--------------------" << std::endl;
     ringDim  = 1 << 15;
-    dcrtBits    = 39;
-    firstMod    = 40; 
-    depth = 7;
-    SHEExample(ringDim, dcrtBits, firstMod, depth);
-
+    dcrtBits = 39;
+    firstMod = 40;
+    depth    = 7;
+    SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_256_quantum);
 }
-void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth){
+void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth, SecurityLevel secLevel) {
     // Step 1: Setup CryptoContext
 
     // A. Specify main parameters
-   CCParams<CryptoContextCKKSRNS> parameters;
-   /*  A1) Secret key distribution
+    CCParams<CryptoContextCKKSRNS> parameters;
+    /*  A1) Secret key distribution
     * The secret key distribution for CKKS should either be SPARSE_TERNARY or UNIFORM_TERNARY.
     * The SPARSE_TERNARY distribution was used in the original CKKS paper,
     * but in this example, we use UNIFORM_TERNARY because this is included in the homomorphic
     * encryption standard.
-    */    
-   SecretKeyDist secretKeyDist = UNIFORM_TERNARY;
-   parameters.SetSecretKeyDist(secretKeyDist);
+    */
+    SecretKeyDist secretKeyDist = UNIFORM_TERNARY;
+    parameters.SetSecretKeyDist(secretKeyDist);
 
-   parameters.SetSecurityLevel(HEStd_NotSet);
-   parameters.SetRingDim(ringDim); 
-   
+    parameters.SetSecurityLevel(secLevel);
+    parameters.SetRingDim(ringDim);
+
     /* A2) Bit-length of scaling factor.
    * CKKS works for real numbers, but these numbers are encoded as integers.
    * For instance, real number m=0.01 is encoded as m'=round(m*D), where D is
@@ -140,7 +139,7 @@ void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth){
    * scaling factor should be large enough to both accommodate this noise and
    * support results that match the desired accuracy.
    */
-   
+
     ScalingTechnique rescaleTech = FLEXIBLEAUTO;
 
     /* A4) Desired security level based on FHE standards.
@@ -161,7 +160,7 @@ void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth){
     parameters.SetScalingModSize(dcrtBits);
     parameters.SetScalingTechnique(rescaleTech);
     parameters.SetFirstModSize(firstMod);
-    
+
     parameters.SetMultiplicativeDepth(depth);
 
     CryptoContext<DCRTPoly> cc = GenCryptoContext(parameters);
@@ -171,19 +170,24 @@ void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth){
     cc->Enable(LEVELEDSHE);
     cc->Enable(ADVANCEDSHE);
     cc->Enable(FHE);
-   /*A3) Number of plaintext slots used in the ciphertext.
+    /*A3) Number of plaintext slots used in the ciphertext.
    * CKKS packs multiple plaintext values in each ciphertext.
    * The maximum number of slots depends on a security parameter called ring
    * dimension. */
-  /*
+    /*
    * Please use method GetRingDimension() to find out the exact ring dimension
    * being used for these parameters. Give ring dimension N, the maximum batch
    * size is N/2, because of the way CKKS works.
    */
     // usint ringDim = cc->GetRingDimension();
     std::cout << "CKKS scheme is using ring dimension " << ringDim << std::endl << std::endl;
-    // uint32_t batchSize = ringDim/2;
-    uint32_t batchSize = 8;
+    std::cout << "log Q " << cc->GetModulus().GetMSB() << std::endl << std::endl;
+    const auto cryptoParamsCKKS = std::dynamic_pointer_cast<CryptoParametersCKKSRNS>(cc->GetCryptoParameters());
+    std::cout << "log P " << cryptoParamsCKKS->GetParamsP()->GetModulus().GetMSB() << std::endl << std::endl;
+    std::cout << "log PQ " << cryptoParamsCKKS->GetParamsQP()->GetModulus().GetMSB() << std::endl << std::endl;
+
+    uint32_t batchSize = ringDim / 2;
+    // uint32_t batchSize = 8;
     // B. Step 2: Key Generation
     /* B1) Generate encryption keys.
    * These are used for encryption/decryption, as well as in generating
@@ -229,16 +233,14 @@ void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth){
     // Copyright (c) Microsoft Corporation. All rights reserved.
     // Licensed under the MIT license
 
-    double step_size = 1.0/(static_cast<double>(batchSize) - 1);
     std::vector<double> x1;
-    x1.reserve(batchSize);
-    double curr_point = 0;
-    for (size_t i = 0; i < batchSize; i++)
-    {
-        x1.push_back(curr_point);
-        curr_point += step_size;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(-1.0, 1.0);
+    for (size_t i = 0; i < batchSize; i++) {
+        x1.push_back(dis(gen));
     }
-    // std::vector<double> x1 = {0.25, 0.5, 0.75, 1.0, 2.0, 3.0, 4.0, 5.0};
+
     // Encoding as plaintexts
     Plaintext ptxt1 = cc->MakeCKKSPackedPlaintext(x1);
     // std::cout << "Input x1: " << ptxt1 << std::endl;
@@ -251,25 +253,24 @@ void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth){
     // Homomorphic multiplication
     // std::cout<<"c1 level=" << c1->GetLevel() << std::endl;
 
-    for (uint32_t i = 0; i < depth; i++){
-    //   c1 = cc->EvalMult(c1, c1);//square f(x)*f(x)
-      // std::cout<<"co"<<c0;
-      c1 = cc->EvalMult(c1, c0);//mul: f(x)*x
+    for (uint32_t i = 0; i < depth; i++) {
+        //   c1 = cc->EvalMult(c1, c1);//square f(x)*f(x)
+        // std::cout<<"co"<<c0;
+        c1 = cc->EvalMult(c1, c0);  // mul: f(x)*x
     }
     std::cout << "# of multiplications  = " << depth << std::endl;
     std::vector<double> expectedResult;
     // std::cout << "cleartext results = ";
     for (double entry : x1) {
-        double expectedEntry = std::pow(entry, depth+1);//mul: f(x)*x
+        double expectedEntry = std::pow(entry, depth + 1);  // mul: f(x)*x
         // double expectedEntry = std::pow(entry, std::pow(2, depth)); //square f(x)*f(x)
         expectedResult.push_back(expectedEntry);
 
         // std::cout << expectedEntry << ' ';
     }
-    
+
     std::cout << std::endl;
     Plaintext ptxt_expResult = cc->MakeCKKSPackedPlaintext(expectedResult);
-      
 
     // Step 5: Decryption and output
     Plaintext result;
@@ -281,11 +282,10 @@ void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth){
     std::cout << std::endl << "Results of homomorphic computations: " << std::endl;
     cc->Decrypt(keys.secretKey, c1, &result);
     result->SetLength(batchSize);
-    
+
     std::cout << "Estimated precision in bits: " << result->GetLogPrecision() << std::endl;
     auto actualResult = result->GetCKKSPackedValue();
     // std::cout << "Actual results = " << actualResult << std::endl;
     double precision = CalculateApproximationError(actualResult, ptxt_expResult->GetCKKSPackedValue());
     std::cout << "Real precision in bits: " << precision << std::endl;
-    
 }

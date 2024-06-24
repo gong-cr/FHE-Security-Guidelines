@@ -41,9 +41,10 @@ Example for CKKS bootstrapping with full packing, modified from simple-ckks-boot
 
 using namespace lbcrypto;
 
-void SimpleBootstrapExample(uint32_t ringDim, usint dcrtBits, usint firstMod, std::vector<uint32_t> levelBudget, uint32_t levelsAvailableAfterBootstrap);
+void SimpleBootstrapExample(uint32_t ringDim, usint dcrtBits, usint firstMod, std::vector<uint32_t> levelBudget,
+                            uint32_t levelsAvailableAfterBootstrap, uint32_t numDigits);
 double CalculateApproximationError(const std::vector<std::complex<double>>& result,
-                                    const std::vector<std::complex<double>>& expectedResult) {
+                                   const std::vector<std::complex<double>>& expectedResult) {
     if (result.size() != expectedResult.size())
         OPENFHE_THROW(config_error, "Cannot compare vectors with different numbers of elements");
 
@@ -56,27 +57,19 @@ double CalculateApproximationError(const std::vector<std::complex<double>>& resu
     return std::abs(std::log2(avrg));
 }
 int main(int argc, char* argv[]) {
-    //SetII
+    // SetII
     std::cout << "--------------------RNS-CKKS with Bootstrapping Set II--------------------" << std::endl;
-    uint32_t ringDim  = 1 << 16;
-    usint dcrtBits    = 55;
-    usint firstMod    = 60; 
-    std::vector<uint32_t> levelBudget = {2, 2};
+    uint32_t ringDim                       = 1 << 16;
+    usint dcrtBits                         = 58;
+    usint firstMod                         = 60;
+    std::vector<uint32_t> levelBudget      = {3, 3};
     uint32_t levelsAvailableAfterBootstrap = 5;
-    SimpleBootstrapExample(ringDim, dcrtBits, firstMod, levelBudget, levelsAvailableAfterBootstrap);
-
-    //SetIII
-    std::cout << "--------------------RNS-CKKS with Bootstrapping Set III--------------------" << std::endl;
-    ringDim  = 1 << 17;
-    dcrtBits    = 55;
-    firstMod    = 60; 
-    levelBudget = {2, 2};
-    levelsAvailableAfterBootstrap = 14;
-    SimpleBootstrapExample(ringDim, dcrtBits, firstMod, levelBudget, levelsAvailableAfterBootstrap);
+    uint32_t numDigits                     = 9;
+    SimpleBootstrapExample(ringDim, dcrtBits, firstMod, levelBudget, levelsAvailableAfterBootstrap, numDigits);
 }
 
-void SimpleBootstrapExample(uint32_t ringDim, usint dcrtBits, usint firstMod, std::vector<uint32_t> levelBudget, uint32_t levelsAvailableAfterBootstrap) {    
-
+void SimpleBootstrapExample(uint32_t ringDim, usint dcrtBits, usint firstMod, std::vector<uint32_t> levelBudget,
+                            uint32_t levelsAvailableAfterBootstrap, uint32_t numDigits) {
     CCParams<CryptoContextCKKSRNS> parameters;
     // A. Specify main parameters
     /*  A1) Secret key distribution
@@ -97,27 +90,24 @@ void SimpleBootstrapExample(uint32_t ringDim, usint dcrtBits, usint firstMod, st
     * or 256-bit security, respectively. If you choose one of these as your security level,
     * you do not need to set the ring dimension.
     */
-    parameters.SetSecurityLevel(HEStd_NotSet);
-    parameters.SetRingDim(ringDim); 
+    parameters.SetSecurityLevel(HEStd_128_classic);
+    parameters.SetRingDim(ringDim);
 
     /*  A3) Scaling parameters.
     * By default, we set the modulus sizes and rescaling technique to the following values
     * to obtain a good precision and performance tradeoff. We recommend keeping the parameters
     * below unless you are an FHE expert.
     */
-#if NATIVEINT == 128 && !defined(__EMSCRIPTEN__)
-    ScalingTechnique rescaleTech = FIXEDAUTO;
-    usint dcrtBits               = 78;
-    usint firstMod               = 89;
-#else
     ScalingTechnique rescaleTech = FLEXIBLEAUTO;
     // usint dcrtBits               = 58;
-    // usint firstMod               = 60; 
-#endif
+    // usint firstMod               = 60;
 
     parameters.SetScalingModSize(dcrtBits);
     parameters.SetScalingTechnique(rescaleTech);
     parameters.SetFirstModSize(firstMod);
+
+    parameters.SetNumLargeDigits(numDigits);
+    parameters.SetKeySwitchTechnique(HYBRID);
 
     /*  A4) Multiplicative depth.
     * The goal of bootstrapping is to increase the number of available levels we have, or in other words,
@@ -127,12 +117,13 @@ void SimpleBootstrapExample(uint32_t ringDim, usint dcrtBits, usint firstMod, st
     * depth. We recommend using the input parameters below to get started.
     */
 
-    usint depth = levelsAvailableAfterBootstrap + FHECKKSRNS::GetBootstrapDepth(8, levelBudget, secretKeyDist);
-    std::cout << "Level consumption for SlotsToCoeffs: " <<levelBudget[0]<< std::endl; 
-    std::cout << "Level consumption for EvalMod: " <<depth - levelsAvailableAfterBootstrap - levelBudget[0] - levelBudget[1]<< std::endl; 
-    std::cout << "Level consumption for CoeffsToSlots: " <<levelBudget[1]<< std::endl; 
+    usint depth = levelsAvailableAfterBootstrap + FHECKKSRNS::GetBootstrapDepth(levelBudget, secretKeyDist);
+    std::cout << "Level consumption for SlotsToCoeffs: " << levelBudget[0] << std::endl;
+    std::cout << "Level consumption for EvalMod: "
+              << depth - levelsAvailableAfterBootstrap - levelBudget[0] - levelBudget[1] - 1 << std::endl;
+    std::cout << "Level consumption for CoeffsToSlots: " << levelBudget[1] << std::endl;
     parameters.SetMultiplicativeDepth(depth);
-    std::cout <<"depth = "<<depth<<std::endl;
+    std::cout << "depth = " << depth << std::endl;
     CryptoContext<DCRTPoly> cryptoContext = GenCryptoContext(parameters);
 
     cryptoContext->Enable(PKE);
@@ -145,22 +136,29 @@ void SimpleBootstrapExample(uint32_t ringDim, usint dcrtBits, usint firstMod, st
     usint numSlots = ringDim / 2;
     std::cout << "CKKS scheme is using ring dimension " << ringDim << std::endl;
     std::cout << "# of slots =  " << numSlots << std::endl << std::endl;
+
+    std::cout << "CKKS scheme is using ring dimension " << ringDim << std::endl << std::endl;
+    std::cout << "log Q " << cryptoContext->GetModulus().GetMSB() << std::endl << std::endl;
+    const auto cryptoParamsCKKS =
+        std::dynamic_pointer_cast<CryptoParametersCKKSRNS>(cryptoContext->GetCryptoParameters());
+    std::cout << "log P " << cryptoParamsCKKS->GetParamsP()->GetModulus().GetMSB() << std::endl << std::endl;
+    std::cout << "log PQ " << cryptoParamsCKKS->GetParamsQP()->GetModulus().GetMSB() << std::endl << std::endl;
+
     cryptoContext->EvalBootstrapSetup(levelBudget);
 
     auto keyPair = cryptoContext->KeyGen();
     cryptoContext->EvalMultKeyGen(keyPair.secretKey);
     cryptoContext->EvalBootstrapKeyGen(keyPair.secretKey, numSlots);
 
-    double step_size = 1.0/(static_cast<double>(numSlots) - 1);
     std::vector<double> x;
-    x.reserve(numSlots);
-    double curr_point = 0;
-    for (size_t i = 0; i < numSlots; i++)
-    {
-        x.push_back(curr_point);
-        curr_point += step_size;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(-1.0, 1.0);
+    for (size_t i = 0; i < numSlots; i++) {
+        x.push_back(dis(gen));
     }
-    size_t encodedLength  = x.size();
+
+    size_t encodedLength = x.size();
 
     Plaintext ptxt = cryptoContext->MakeCKKSPackedPlaintext(x, 1, depth - 1);
 
@@ -182,6 +180,6 @@ void SimpleBootstrapExample(uint32_t ringDim, usint dcrtBits, usint firstMod, st
     result->SetLength(encodedLength);
     // std::cout << "Output after bootstrapping \n\t" << result << std::endl;
     auto actualResult = result->GetCKKSPackedValue();
-    double precision = CalculateApproximationError(actualResult, ptxt->GetCKKSPackedValue());
+    double precision  = CalculateApproximationError(actualResult, ptxt->GetCKKSPackedValue());
     std::cout << "Real precision in bits: " << precision << std::endl;
 }
