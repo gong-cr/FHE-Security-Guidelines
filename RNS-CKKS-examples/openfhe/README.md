@@ -1,1 +1,1 @@
-To run the scripts, clone OpenFHE v1.2.0, copy the *.cpp files to src\pke\examples, and build OpenFHE following the OpenFHE instructions.
+To run the scripts, clone OpenFHE v1.2.0, copy the *.cpp files to src/pke/examples, and build OpenFHE following the OpenFHE instructions.
