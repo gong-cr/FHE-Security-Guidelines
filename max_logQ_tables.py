@@ -16,7 +16,7 @@ secret_mode = MODE_TERNARY # MODE_TERNARY or MODE_GAUSSIAN
 cost_model_classical = RC.MATZOV
 cost_model_quantum = RC.LaaMosPol14
 m = oo
-security_margin = 0
+# security_margin = 0
 n_list = [2**i for i in range(10, 18)]
 
 def initial_log_q(n, secret_dist, security_thres, power_setting):
@@ -50,27 +50,33 @@ ESTIMATORS = {
     "classical": {
         MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)
-                    #   ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
+                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
                      ],
         MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)
-                    #   ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
+                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
                     ]
     },
     "quantum": {
         MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)
-                    #   ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
+                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
                       ],
         MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)
-                    #   ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
+                      ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
                       ]
     }
 }
-def get_estimators_for_mode(secret_mode, power_setting):
+def get_estimators_for_mode(secret_mode, power_setting, n_dim):
     # print(secret_mode, power_setting)
-    return ESTIMATORS[power_setting][secret_mode]
+    estimators =  ESTIMATORS[power_setting][secret_mode]
+    filtered_estimators = []
+    for estimator in estimators:
+        if n_dim > 2**14 and estimator.func == LWE.primal_hybrid:
+            continue
+        filtered_estimators.append(estimator)
+    return filtered_estimators
 
 def cost_estimating(estimator, logq, n_dim, secret_dist, error_dist):
     instance = LWE.Parameters(n=n_dim, q=2**logq, Xs=secret_dist, Xe=error_dist, m=m)
@@ -153,6 +159,7 @@ secret = {MODE_TERNARY: "ternary", MODE_GAUSSIAN: "Gaussian"}
 
 if __name__ == "__main__":
     security_thres = int(sys.argv[1])
+    security_margin = int(sys.argv[2])
 
 security_target = security_thres + security_margin
 print(f"security threshold = {security_thres}, margin = {security_margin}, target = {security_target}")
@@ -162,7 +169,7 @@ for n_dim in n_list:
     print(f"dim = {n_dim}")
     for power in ["classical", "quantum"]:
         for secret_mode in [MODE_TERNARY, MODE_GAUSSIAN]:
-            estimators = get_estimators_for_mode(secret_mode, power)
+            estimators = get_estimators_for_mode(secret_mode, power, n_dim)
             logq = process_maxlogq(estimators, n_dim, secret_mode, error_dist, security_target, power)
             print(f"{power} {secret[secret_mode]}, max logq = {logq}")
     print("-------------------------------------")
