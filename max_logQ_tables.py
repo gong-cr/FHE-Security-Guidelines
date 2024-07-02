@@ -13,12 +13,11 @@ MODE_GAUSSIAN = ND.DiscreteGaussian(stddev=3.19, mean=0, n=None)
 
 error_dist = ND.DiscreteGaussian(stddev=3.19, mean=0, n=None)
 secret_mode = MODE_TERNARY # MODE_TERNARY or MODE_GAUSSIAN
-cost_model_classical = RC.BDGL16
+cost_model_classical = RC.MATZOV
 cost_model_quantum = RC.LaaMosPol14
 m = oo
 security_margin = 0
 n_list = [2**i for i in range(10, 18)]
-# print(dir(LWE))
 
 def initial_log_q(n, secret_dist, security_thres, power_setting):
     # Define the linear coefficients for each scenario
@@ -76,7 +75,6 @@ def get_estimators_for_mode(secret_mode, power_setting):
 def cost_estimating(estimator, logq, n_dim, secret_dist, error_dist):
     instance = LWE.Parameters(n=n_dim, q=2**logq, Xs=secret_dist, Xe=error_dist, m=m)
     # start_time = time.time()
-    # print(F"DEBUG: {n_dim, logq, secret_dist, error_dist}")
     attack_costs = estimator(params=instance)
     # end_time = time.time()
     # elapsed_time = end_time - start_time
@@ -129,7 +127,7 @@ def logq_search_interval(estimator, n_dim, secret_mode, error_dist, security_tar
                 break
             else:
                 logq_right += logq_interval
-    print(f"DEBUG: search range: {logq_left, logq_right}")
+    # print(f"DEBUG: search range: {logq_left, logq_right}")
     return logq_left, logq_right
 
 def maxlogq_finder(estimator, n_dim, secret_dist, error_dist, security_target, power_setting):
