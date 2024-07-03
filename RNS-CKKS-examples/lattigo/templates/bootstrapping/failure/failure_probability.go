@@ -14,58 +14,59 @@ import (
 // - K: upper bound for I(X)
 // - logN: log2(ring degree)
 // - logSlots: log2(#complex slots)
-func Probability(Xs ring.DistributionParameters, K, logN, logSlots int) (logfailure float64) {
+func Probability(Xs *ring.Ternary, K, logN, logSlots int) (logfailure float64) {
 
-	switch Xs := Xs.(type) {
-	case *ring.Ternary:
+	// failureProbability returns PR[||I(X)|| > K] given
+	// h: the Hamming weight of the secret
+	// K: the upper bound of I(X)
+	// logSlots: log2(#complex slots)
 
-		if Xs.H != 0 && Xs.P != 0 {
-			panic("invalid Xs: Xs.H and Xs.P cannot both be non-zero")
-		}
-
-		var c int
-		var Eh int
-
-		// If Xs is a probability density, then also takes into account
-		// the correction factor of K.
-		if Xs.P != 0 {
-
-			prec := uint(256)
-
-			N := math.Exp2(float64(logN))
-			Eh = int(math.Ceil(N*Xs.P) + 1)
-
-			EhSqrt := math.Sqrt(float64(Eh))
-			s := math.Sqrt(1 - Xs.P)
-			sqrt2 := math.Sqrt(2)
-
-			// Binary search such that |PR[I(X) > K - c] - PR[h > E[h] + c/kappa * sigma(h)]| is small
-			c = K >> 1
-			step := c >> 1
-			for step != 0 {
-
-				kappa := float64(K-c) / EhSqrt
-
-				d := float64(c) / (kappa * s)
-
-				if Log2ErfC(d/sqrt2, prec) > failureProbability(Eh, K-c, logSlots) {
-					c += step
-				} else {
-					c -= step
-				}
-
-				step >>= 1
-			}
-		} else {
-			Eh = Xs.H
-		}
-
-		return failureProbability(Eh, K-c, logSlots)
-	case ring.Ternary:
-		return Probability(&Xs, K, logN, logSlots)
-	default:
-		panic(fmt.Errorf("invalid input: Xs must be *ring.Ternary or ring.Ternary, but is %T", Xs))
+	if Xs.H != 0 && Xs.P != 0 {
+		panic(fmt.Errorf("invalid Xs: Xs.H and Xs.P cannot both be non-zero"))
 	}
+
+	var c int
+	var Eh int
+
+	// If Xs is a probability density, then also takes into account
+	// the correction factor of K.
+	if Xs.P != 0 {
+
+		prec := uint(256)
+
+		N := math.Exp2(float64(logN))
+		Eh = int(math.Ceil(N*Xs.P) + 1)
+
+		EhSqrt := math.Sqrt(float64(Eh))
+		s := math.Sqrt(1 - Xs.P)
+		sqrt2 := math.Sqrt(2)
+
+		// Binary search such that |PR[I(X) > K - c] - PR[h > E[h] + c/kappa * sigma(h)]| is small
+		c = K >> 1
+		step := c >> 1
+		for step != 0 {
+
+			kappa := float64(K-c) / EhSqrt
+			d := float64(c) / (kappa * s)
+			erfc := Log2ErfC(d/sqrt2, prec)
+			fail := failureProbability(Eh, K-c, logSlots)
+
+			if erfc > fail {
+				c += step
+			} else if erfc < fail {
+				c -= step
+			} else {
+				break
+			}
+
+			step >>= 1
+		}
+
+	} else {
+		Eh = Xs.H
+	}
+
+	return failureProbability(Eh, K-c, logSlots)
 }
 
 // failureProbability returns PR[||I(X)|| > K] given
@@ -73,88 +74,124 @@ func Probability(Xs ring.DistributionParameters, K, logN, logSlots int) (logfail
 // K: the upper bound of I(X)
 // logSlots: log2(#complex slots)
 func failureProbability(h, K, logSlots int) (logfailure float64) {
-	kappa := float64(K) / math.Sqrt(float64(h+1))
-	return F8192[int(math.Round(math.Sqrt(8192)*kappa))] + float64(logSlots+1)
-}
-
-// GetCorrectionFactor returns d such that 1-erf(d/sqrt(2))
-// is close to 2^{logfailure}.
-func GetCorrectionFactor(logfailure float64) (d float64) {
-
-	prec := uint(256)
-
-	sqrt2 := math.Sqrt(2)
-
-	d = 1.0
-	for Log2ErfC(d/sqrt2, prec) > logfailure {
-		d++
+	if h > 1024 {
+		kappa := float64(K) / math.Sqrt(float64(h))
+		return F8192[int(math.Round(math.Sqrt(8192+1)*kappa))] + float64(logSlots+1)
 	}
 
-	step := d
-	for step > 1e-3 {
-
-		if Log2ErfC(d/sqrt2, prec) > logfailure {
-			d += step
-		} else {
-			d -= step
-		}
-
-		step /= 2
-	}
-
-	return
+	return ModifiedIrwinHall(K, h, logSlots)
 }
 
 // FindSuitableK finds the smallest K such that PR[||I(X)|| > K] <= 2^{logfailure}.
-func FindSuitableK(Xs ring.DistributionParameters, logN, logSlots int, logfailure float64) (K int) {
+func FindSuitableK(Xs *ring.Ternary, logN, logSlots int, logfailure float64) (K int) {
 
-	switch Xs := Xs.(type) {
-	case *ring.Ternary:
-		if Xs.H != 0 && Xs.P != 0 {
-			panic("invalid Xs: Xs.H and Xs.P cannot both be non-zero")
+	// getCorrectionFactor returns d such that 1-erf(d/sqrt(2))
+	// is close to 2^{logfailure}.
+	getCorrectionFactor := func(logfailure float64) (d float64) {
+
+		prec := uint(256)
+
+		sqrt2 := math.Sqrt(2)
+
+		d = 1.0
+		for Log2ErfC(d/sqrt2, prec) > logfailure {
+			d++
 		}
 
-		if Xs.H != 0 {
-			return findSuiteableK(Xs.H+1, logSlots, logfailure)
+		step := d
+		for step > 1e-3 {
+
+			if Log2ErfC(d/sqrt2, prec) > logfailure {
+				d += step
+			} else {
+				d -= step
+			}
+
+			step /= 2
 		}
 
-		// If Xs is a probability density, then also
-		// adds a correction factor to K.
-		N := math.Exp2(float64(logN))
-
-		Eh := math.Ceil(N*Xs.P) + 1
-
-		K := findSuiteableK(int(Eh), logSlots, logfailure)
-
-		kappa := float64(K) / math.Sqrt(Eh)
-
-		d := GetCorrectionFactor(logfailure)
-
-		return K + int(math.Ceil(d*kappa*math.Sqrt(1-Xs.P)))
-	case ring.Ternary:
-		return FindSuitableK(&Xs, logN, logSlots, logfailure)
-	default:
-		panic(fmt.Errorf("invalid input: Xs must be *ring.Ternary or ring.Ternary, but is %T", Xs))
+		return
 	}
-}
 
-func findSuiteableK(h, logSlots int, logfailure float64) (K int) {
+	findK := func(h, logSlots int, logfailure float64) (K int) {
 
-	K = len(F8192) >> 1
-	step := K >> 1
-	for step > 0 {
-		if F8192[K] > logfailure-float64(logSlots+1) {
-			K += step
+		if h > 1024 {
+			K = len(F8192) >> 1
+			step := K >> 1
+			for step > 0 {
+				if F8192[K] > logfailure-float64(logSlots+1) {
+					K += step
+				} else if F8192[K] < logfailure-float64(logSlots+1) {
+					K -= step
+				} else {
+					break
+				}
+
+				step >>= 1
+			}
+
+			for F8192[K] < logfailure-float64(logSlots+1) {
+				K--
+			}
+
+			for F8192[K] > logfailure-float64(logSlots+1) {
+				K++
+			}
+
+			kappa := float64(K) / math.Sqrt(float64(8192+1))
+
+			return int(math.Ceil(kappa * math.Sqrt(float64(h+1))))
 		} else {
-			K -= step
+
+			step := h >> 2
+			K = h >> 1
+			for step > 0 {
+
+				if d := ModifiedIrwinHall(K, h, logSlots); d > logfailure {
+					K += step
+				} else if d < logfailure {
+					K -= step
+				} else {
+					return
+				}
+
+				step >>= 1
+			}
+
+			for ModifiedIrwinHall(K, h, logSlots) < logfailure {
+				K--
+			}
+
+			for ModifiedIrwinHall(K, h, logSlots) > logfailure {
+				K++
+			}
+
+			return
 		}
 
-		step >>= 1
 	}
 
-	kappa := float64(K) / math.Sqrt(float64(8192))
+	if Xs.H != 0 && Xs.P != 0 {
+		panic(fmt.Errorf("invalid Xs: Xs.H and Xs.P cannot both be non-zero"))
+	}
 
-	return int(math.Ceil(kappa * math.Sqrt(float64(h))))
+	if Xs.H != 0 {
+		return findK(Xs.H, logSlots, logfailure)
+	}
+
+	// If Xs is a probability density, then also
+	// adds a correction factor to K.
+	N := math.Exp2(float64(logN))
+
+	Eh := math.Ceil(N*Xs.P) + 1
+
+	K = findK(int(Eh), logSlots, logfailure)
+
+	kappa := float64(K) / math.Sqrt(Eh)
+
+	d := getCorrectionFactor(logfailure)
+
+	return K + int(math.Ceil(d*kappa*math.Sqrt(1-Xs.P)))
 }
 
 // Log2ErfC returns log2(1 - erf(x)).

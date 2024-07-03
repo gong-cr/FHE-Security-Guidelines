@@ -118,7 +118,8 @@ func main() {
 
 	// We can estimate the bootstrapping failure probability with:
 	fmt.Println("==== FAILURE PROBABILITY ====")
-	pr := failure.Probability(params.Xs(), *BootstrappingLit.K, params.LogN(), params.LogMaxSlots())
+	Xs := params.Xs().(ring.Ternary)
+	pr := failure.Probability(&Xs, *BootstrappingLit.K, params.LogN(), params.LogMaxSlots())
 	fmt.Printf("Failure Probability given K=%d: 2^{%f}\n", *BootstrappingLit.K, pr)
 	fmt.Println("=============================")
 
