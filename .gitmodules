@@ -1,3 +1,6 @@
 [submodule "lattice-estimator"]
 	path = lattice-estimator
 	url = https://github.com/malb/lattice-estimator.git
+[submodule "TFHE-examples/concrete"]
+	path = TFHE-examples/concrete
+	url = git@github.com:zama-ai/concrete

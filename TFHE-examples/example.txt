@@ -1,0 +1,2 @@
+cargo run --release --quiet --bin v0-parameters -- $@ --p-error=5.421010862427522e-20 --min-precision=4 --max-precision=4
+
