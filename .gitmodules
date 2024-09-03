@@ -4,3 +4,6 @@
 [submodule "TFHE-examples/concrete"]
 	path = TFHE-examples/concrete
 	url = git@github.com:zama-ai/concrete
+[submodule "concrete"]
+	path = concrete
+	url = git@github.com:zama-ai/concrete
