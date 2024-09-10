@@ -23,22 +23,19 @@ func main() {
 	//
 	// This example uses the `Params32768TernaryClassic128` which provide 128-bit secure
 	// parameters against classical attacks for a ring degree of 2^{15}.
-	if params, err = hefloat.NewParametersFromLiteral(hefloat.ParametersLiteral{
-		// Mandatory:
-		LogN:            15,
-		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
-		LogP:            []int{56, 55, 55, 55},
-		LogDefaultScale: 50,
-		// Optional (see lattigo/schemes/ckks/parameters.go):
-		// - Xs: secret-key distribution (by default ring.Ternary{P:2.0/3})
-		// - Xe: error distribution (by default ring.DiscreteGaussian{Sigma:3.19, Bound:19})
-		// - LogNthRoot: n-th root used (by default LogN+1)
-		// - RingType:
-		//   - ring.Standard (by default): Z[X]/(X^{N}+1), which enables up to N/2 complex slots
-		//   - ring.ConjugateInvariant: Z[X + X^{-1}]/(X^{N} + 1), which enables up to N real slots.
-		// - Q: specify exact primes (instead of LogQ)
-		// - P: specify exact primes (instead of LogP)
-	}); err != nil {
+
+	paramsLit := parameters.ParametersList["Params32768TernaryClassic128"]
+	// Optional (see lattigo/schemes/ckks/parameters.go):
+	// - Xs: secret-key distribution (by default ring.Ternary{P:2.0/3})
+	// - Xe: error distribution (by default ring.DiscreteGaussian{Sigma:3.19, Bound:19})
+	// - LogNthRoot: n-th root used (by default LogN+1)
+	// - RingType:
+	//   - ring.Standard (by default): Z[X]/(X^{N}+1), which enables up to N/2 complex slots
+	//   - ring.ConjugateInvariant: Z[X + X^{-1}]/(X^{N} + 1), which enables up to N real slots.
+	// - Q: specify exact primes (instead of LogQ)
+	// - P: specify exact primes (instead of LogP)
+
+	if params, err = hefloat.NewParametersFromLiteral(paramsLit); err != nil {
 		panic(err)
 	}
 

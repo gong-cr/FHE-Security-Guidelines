@@ -13,11 +13,10 @@ type SecurityType int
 
 const (
 	Classical = SecurityType(0)
-	Quantum   = SecurityType(1)
 )
 
 // AssertSecurity asserts the security of the provided [hefloat.Parameters] according to the
-// security parameter 2^{lambda} and security type [Classical] or [Quantum].
+// security parameter 2^{lambda} and security type [Classical].
 // A descriptive error is returned if the parameters do not meet the target security.
 func AssertSecurity(p hefloat.Parameters, lambda int, securityType SecurityType) (err error) {
 
@@ -32,10 +31,8 @@ func AssertSecurity(p hefloat.Parameters, lambda int, securityType SecurityType)
 		switch securityType {
 		case Classical:
 			Table = TableClassicalTernary
-		case Quantum:
-			Table = TableQuantumTernary
 		default:
-			return fmt.Errorf("unsupported SecurityType: should be Classical or Quantum but is %v", securityType)
+			return fmt.Errorf("unsupported SecurityType: should be Classical but is %v", securityType)
 		}
 
 	case ring.DiscreteGaussian:
@@ -46,10 +43,8 @@ func AssertSecurity(p hefloat.Parameters, lambda int, securityType SecurityType)
 		switch securityType {
 		case Classical:
 			Table = TableClassicalGaussian
-		case Quantum:
-			Table = TableQuantumGaussian
 		default:
-			return fmt.Errorf("unsupported SecurityType: should be Classical or Quantum but is %v", securityType)
+			return fmt.Errorf("unsupported SecurityType: should be Classical but is %v", securityType)
 		}
 
 	default:
@@ -94,9 +89,9 @@ Log2(Scaling Factor): %d`,
 }
 
 // ParameterInfos is a struct storing informations about the parameters:
-// - Name: Params[N]Ternary[Classic/Quantum][Lambda]
+// - Name: Params[N]Ternary[Classic][Lambda]
 // - Lambda: security (bits) of the parameters
-// - SecurityType: [Classical] or [Quantum]
+// - SecurityType: [Classical]
 type ParameterInfos struct {
 	Name         string
 	Lambda       int
@@ -110,15 +105,9 @@ var ParametersInfosList = []ParameterInfos{
 	{"Params32768TernaryClassic128", 128, Classical},
 	{"Params32768TernaryClassic192", 192, Classical},
 	{"Params32768TernaryClassic256", 256, Classical},
-	{"Params32768TernaryQuantum128", 128, Quantum},
-	{"Params32768TernaryQuantum192", 192, Quantum},
-	{"Params32768TernaryQuantum256", 256, Quantum},
 	{"Params65536TernaryClassic128", 128, Classical},
 	{"Params65536TernaryClassic192", 192, Classical},
 	{"Params65536TernaryClassic256", 256, Classical},
-	{"Params65536TernaryQuantum128", 128, Quantum},
-	{"Params65536TernaryQuantum192", 192, Quantum},
-	{"Params65536TernaryQuantum256", 256, Quantum},
 }
 
 // ParametersList is a list of example parameters stored in a map indexed
@@ -129,84 +118,42 @@ var ParametersList = map[string]hefloat.ParametersLiteral{
 	"Params32768TernaryClassic128": {
 		LogN:            15,
 		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
-		LogP:            []int{56, 55, 55, 55},
+		LogP:            []int{61, 61, 61},
 		LogDefaultScale: 50,
 	},
 
 	"Params32768TernaryClassic192": {
 		LogN:            15,
-		LogQ:            []int{60, 48, 48, 48, 48, 48, 48, 48, 48},
-		LogP:            []int{56, 56, 55},
-		LogDefaultScale: 48,
+		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50},
+		LogP:            []int{61, 61},
+		LogDefaultScale: 50,
 	},
 
 	"Params32768TernaryClassic256": {
 		LogN:            15,
-		LogQ:            []int{60, 50, 50, 50, 50, 50, 50},
-		LogP:            []int{60, 55},
-		LogDefaultScale: 50,
-	},
-
-	"Params32768TernaryQuantum128": {
-		LogN:            15,
-		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
-		LogP:            []int{54, 54, 54, 54},
-		LogDefaultScale: 50,
-	},
-
-	"Params32768TernaryQuantum192": {
-		LogN:            15,
-		LogQ:            []int{60, 49, 49, 49, 49, 49, 49, 49},
-		LogP:            []int{56, 56, 55},
-		LogDefaultScale: 49,
-	},
-
-	"Params32768TernaryQuantum256": {
-		LogN:            15,
-		LogQ:            []int{60, 45, 45, 45, 45, 45, 45},
-		LogP:            []int{55, 55},
-		LogDefaultScale: 45,
+		LogQ:            []int{58, 48, 48, 48, 48, 48, 48},
+		LogP:            []int{58, 58},
+		LogDefaultScale: 48,
 	},
 
 	"Params65536TernaryClassic128": {
 		LogN:            16,
-		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
-		LogP:            []int{53, 53, 53, 53, 53, 52},
+		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
+		LogP:            []int{54, 54, 54, 54, 54, 54},
 		LogDefaultScale: 50,
 	},
 
 	"Params65536TernaryClassic192": {
 		LogN:            16,
-		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
-		LogP:            []int{54, 54, 54, 54, 53},
+		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
+		LogP:            []int{54, 54, 54, 54, 54},
 		LogDefaultScale: 50,
 	},
 
 	"Params65536TernaryClassic256": {
 		LogN:            16,
-		LogQ:            []int{60, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48},
-		LogP:            []int{56, 56, 56, 55},
-		LogDefaultScale: 48,
-	},
-
-	"Params65536TernaryQuantum128": {
-		LogN:            16,
-		LogQ:            []int{60, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49},
-		LogP:            []int{55, 55, 55, 55, 55, 55},
-		LogDefaultScale: 49,
-	},
-
-	"Params65536TernaryQuantum192": {
-		LogN:            16,
-		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
-		LogP:            []int{57, 57, 57, 57, 57},
+		LogQ:            []int{60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
+		LogP:            []int{55, 55, 55, 54},
 		LogDefaultScale: 50,
-	},
-
-	"Params65536TernaryQuantum256": {
-		LogN:            16,
-		LogQ:            []int{60, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47},
-		LogP:            []int{55, 55, 54, 54},
-		LogDefaultScale: 47,
 	},
 }

@@ -36,10 +36,10 @@ var ParametersClassical = map[int]Parameters{
 		// First we must define the residual parameters.
 		// The residual parameters are the parameters used outside of the bootstrapping circuit.
 		ResidualLit: hefloat.ParametersLiteral{
-			LogN:            16,                                                    // Log2 of the ring degree
-			LogQ:            []int{45, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35}, // Log2 of the ciphertext prime moduli
-			LogP:            []int{55, 40, 40},                                     // Log2 of the key-switch auxiliary prime moduli
-			LogDefaultScale: 35,                                                    // Log2 of the scale
+			LogN:            16,                                                // Log2 of the ring degree
+			LogQ:            []int{45, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35}, // Log2 of the ciphertext prime moduli
+			LogP:            []int{55, 40, 40},                                 // Log2 of the key-switch auxiliary prime moduli
+			LogDefaultScale: 35,                                                // Log2 of the scale
 		},
 
 		// The bootstrapping circuit use its own Parameters
