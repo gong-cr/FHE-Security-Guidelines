@@ -68,8 +68,8 @@ int main(int argc, char* argv[]) {
 
     std::cout << "--------------------COLUMN 2--------------------" << std::endl;
     ringDim  = 1 << 15;
-    dcrtBits = 42;
-    firstMod = 44;
+    dcrtBits = 41;
+    firstMod = 43;
     depth    = 9;
     SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_192_classic);
 
@@ -77,29 +77,9 @@ int main(int argc, char* argv[]) {
     ringDim  = 1 << 15;
     dcrtBits = 39;
     firstMod = 40;
-    depth    = 8;
+    depth    = 7;
     SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_256_classic);
 
-    std::cout << "--------------------COLUMN 4--------------------" << std::endl;
-    ringDim  = 1 << 14;
-    dcrtBits = 38;
-    firstMod = 40;
-    depth    = 6;
-    SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_128_quantum);
-
-    std::cout << "--------------------COLUMN 5--------------------" << std::endl;
-    ringDim  = 1 << 15;
-    dcrtBits = 42;
-    firstMod = 44;
-    depth    = 8;
-    SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_192_quantum);
-
-    std::cout << "--------------------COLUMN 6--------------------" << std::endl;
-    ringDim  = 1 << 15;
-    dcrtBits = 39;
-    firstMod = 40;
-    depth    = 7;
-    SHEExample(ringDim, dcrtBits, firstMod, depth, HEStd_256_quantum);
 }
 void SHEExample(uint32_t ringDim, usint dcrtBits, usint firstMod, usint depth, SecurityLevel secLevel) {
     // Step 1: Setup CryptoContext

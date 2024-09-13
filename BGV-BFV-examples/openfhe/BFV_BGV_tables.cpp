@@ -70,36 +70,12 @@ int main(int argc, char* argv[]) {
     scalingModSize   = 60;
     BFVExample(multDepth, secLevel, numDigits, plaintextModulus, scalingModSize);
 
-    std::cout << "--------------------COLUMN 4--------------------" << std::endl;
-    multDepth        = 9;
-    secLevel         = HEStd_128_quantum;
-    numDigits        = 6;
-    plaintextModulus = 65537;
-    scalingModSize   = 55;
-    BFVExample(multDepth, secLevel, numDigits, plaintextModulus, scalingModSize);
-
-    std::cout << "--------------------COLUMN 5--------------------" << std::endl;
-    multDepth        = 14;
-    secLevel         = HEStd_192_quantum;
-    numDigits        = 9;
-    plaintextModulus = 65537;
-    scalingModSize   = 55;
-    BFVExample(multDepth, secLevel, numDigits, plaintextModulus, scalingModSize);
-
-    std::cout << "--------------------COLUMN 6--------------------" << std::endl;
-    multDepth        = 17;
-    secLevel         = HEStd_256_quantum;
-    numDigits        = 3;
-    plaintextModulus = 65537;
-    scalingModSize   = 57;
-    BFVExample(multDepth, secLevel, numDigits, plaintextModulus, scalingModSize);
-
     std::cout << "====================BGV Parameters====================" << std::endl;
 
     std::cout << "--------------------COLUMN 1--------------------" << std::endl;
-    multDepth        = 9;
+    multDepth        = 8;
     secLevel         = HEStd_128_classic;
-    numDigits        = 11;
+    numDigits        = 10;
     plaintextModulus = 65537;
     BGVExample(multDepth, secLevel, numDigits, plaintextModulus);
 
@@ -117,26 +93,6 @@ int main(int argc, char* argv[]) {
     plaintextModulus = 65537;
     BGVExample(multDepth, secLevel, numDigits, plaintextModulus);
 
-    std::cout << "--------------------COLUMN 4--------------------" << std::endl;
-    multDepth        = 8;
-    secLevel         = HEStd_128_quantum;
-    numDigits        = 10;
-    plaintextModulus = 65537;
-    BGVExample(multDepth, secLevel, numDigits, plaintextModulus);
-
-    std::cout << "--------------------COLUMN 5--------------------" << std::endl;
-    multDepth        = 12;
-    secLevel         = HEStd_192_quantum;
-    numDigits        = 14;
-    plaintextModulus = 65537;
-    BGVExample(multDepth, secLevel, numDigits, plaintextModulus);
-
-    std::cout << "--------------------COLUMN 6--------------------" << std::endl;
-    multDepth        = 15;
-    secLevel         = HEStd_256_quantum;
-    numDigits        = 3;
-    plaintextModulus = 65537;
-    BGVExample(multDepth, secLevel, numDigits, plaintextModulus);
 }
 void BFVExample(uint32_t multDepth, SecurityLevel secLevel, uint32_t numDigits, uint32_t plaintextModulus,
                 uint32_t scalingModSize) {
