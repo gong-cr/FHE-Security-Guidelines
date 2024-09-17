@@ -656,7 +656,7 @@ param_tfhe_630_binary_classic_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**49.9),
+    Xe = ND.DiscreteGaussian(2**50.5),
     m = oo,
     tag = "param_tfhe_630_binary_classic_128"
 )
@@ -665,7 +665,7 @@ param_tfhe_630_ternary_classic_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**48.6),
+    Xe = ND.DiscreteGaussian(2**49.2),
     m = oo,
     tag = "param_tfhe_630_ternary_classic_128"
 )
@@ -674,43 +674,16 @@ param_tfhe_630_gaussian_classic_128 = LWE.Parameters(
     n = 630,
     q = 2**64,
     Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**46.2),
+    Xe = ND.DiscreteGaussian(2**46.6),
     m = oo,
     tag = "param_tfhe_630_gaussian_classic_128"
-)
-
-param_tfhe_630_binary_quantum_128 = LWE.Parameters(
-    n = 630,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**50.9),
-    m = oo,
-    tag = "param_tfhe_630_binary_quantum_128"
-)
-
-param_tfhe_630_ternary_quantum_128 = LWE.Parameters(
-    n = 630,
-    q = 2**64,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**49.7),
-    m = oo,
-    tag = "param_tfhe_630_ternary_quantum_128"
-)
-
-param_tfhe_630_gaussian_quantum_128 = LWE.Parameters(
-    n = 630,
-    q = 2**64,
-    Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**47.4),
-    m = oo,
-    tag = "param_tfhe_630_gaussian_quantum_128"
 )
 
 param_tfhe_750_binary_classic_128 = LWE.Parameters(
     n = 750,
     q = 2**64,
     Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**46.8),
+    Xe = ND.DiscreteGaussian(2**47.4),
     m = oo,
     tag = "param_tfhe_750_binary_classic_128"
 )
@@ -719,7 +692,7 @@ param_tfhe_750_ternary_classic_128 = LWE.Parameters(
     n = 750,
     q = 2**64,
     Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**45.5),
+    Xe = ND.DiscreteGaussian(2**46.2),
     m = oo,
     tag = "param_tfhe_750_ternary_classic_128"
 )
@@ -728,43 +701,16 @@ param_tfhe_750_gaussian_classic_128 = LWE.Parameters(
     n = 750,
     q = 2**64,
     Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**43.0),
+    Xe = ND.DiscreteGaussian(2**43.5),
     m = oo,
     tag = "param_tfhe_750_gaussian_classic_128"
-)
-
-param_tfhe_750_binary_quantum_128 = LWE.Parameters(
-    n = 750,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**48.0),
-    m = oo,
-    tag = "param_tfhe_750_binary_quantum_128"
-)
-
-param_tfhe_750_ternary_quantum_128 = LWE.Parameters(
-    n = 750,
-    q = 2**64,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**46.7),
-    m = oo,
-    tag = "param_tfhe_750_ternary_quantum_128"
-)
-
-param_tfhe_750_gaussian_quantum_128 = LWE.Parameters(
-    n = 750,
-    q = 2**64,
-    Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**44.4),
-    m = oo,
-    tag = "param_tfhe_750_gaussian_quantum_128"
 )
 
 param_tfhe_870_binary_classic_128 = LWE.Parameters(
     n = 870,
     q = 2**64,
     Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**43.7),
+    Xe = ND.DiscreteGaussian(2**44.3),
     m = oo,
     tag = "param_tfhe_870_binary_classic_128"
 )
@@ -773,7 +719,7 @@ param_tfhe_870_ternary_classic_128 = LWE.Parameters(
     n = 870,
     q = 2**64,
     Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**42.4),
+    Xe = ND.DiscreteGaussian(2**43.1),
     m = oo,
     tag = "param_tfhe_870_ternary_classic_128"
 )
@@ -782,43 +728,16 @@ param_tfhe_870_gaussian_classic_128 = LWE.Parameters(
     n = 870,
     q = 2**64,
     Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**39.9),
+    Xe = ND.DiscreteGaussian(2**40.3),
     m = oo,
     tag = "param_tfhe_870_gaussian_classic_128"
-)
-
-param_tfhe_870_binary_quantum_128 = LWE.Parameters(
-    n = 870,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**45.0),
-    m = oo,
-    tag = "param_tfhe_870_binary_quantum_128"
-)
-
-param_tfhe_870_ternary_quantum_128 = LWE.Parameters(
-    n = 870,
-    q = 2**64,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**43.8),
-    m = oo,
-    tag = "param_tfhe_870_ternary_quantum_128"
-)
-
-param_tfhe_870_gaussian_quantum_128 = LWE.Parameters(
-    n = 870,
-    q = 2**64,
-    Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**41.4),
-    m = oo,
-    tag = "param_tfhe_870_gaussian_quantum_128"
 )
 
 param_tfhe_1024_binary_classic_128 = LWE.Parameters(
     n = 1024,
     q = 2**64,
     Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**39.6),
+    Xe = ND.DiscreteGaussian(2**40.3),
     m = oo,
     tag = "param_tfhe_1024_binary_classic_128"
 )
@@ -827,7 +746,7 @@ param_tfhe_1024_ternary_classic_128 = LWE.Parameters(
     n = 1024,
     q = 2**64,
     Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**38.3),
+    Xe = ND.DiscreteGaussian(2**39.1),
     m = oo,
     tag = "param_tfhe_1024_ternary_classic_128"
 )
@@ -836,43 +755,16 @@ param_tfhe_1024_gaussian_classic_128 = LWE.Parameters(
     n = 1024,
     q = 2**64,
     Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**36.1),
+    Xe = ND.DiscreteGaussian(2**36.4),
     m = oo,
     tag = "param_tfhe_1024_gaussian_classic_128"
-)
-
-param_tfhe_1024_binary_quantum_128 = LWE.Parameters(
-    n = 1024,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**41.2),
-    m = oo,
-    tag = "param_tfhe_1024_binary_quantum_128"
-)
-
-param_tfhe_1024_ternary_quantum_128 = LWE.Parameters(
-    n = 1024,
-    q = 2**64,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**40.0),
-    m = oo,
-    tag = "param_tfhe_1024_ternary_quantum_128"
-)
-
-param_tfhe_1024_gaussian_quantum_128 = LWE.Parameters(
-    n = 1024,
-    q = 2**64,
-    Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**37.9),
-    m = oo,
-    tag = "param_tfhe_1024_gaussian_quantum_128"
 )
 
 param_tfhe_2048_binary_classic_128 = LWE.Parameters(
     n = 2048,
     q = 2**64,
     Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**12.6),
+    Xe = ND.DiscreteGaussian(2**13.7),
     m = oo,
     tag = "param_tfhe_2048_binary_classic_128"
 )
@@ -881,7 +773,7 @@ param_tfhe_2048_ternary_classic_128 = LWE.Parameters(
     n = 2048,
     q = 2**64,
     Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**11.4),
+    Xe = ND.DiscreteGaussian(2**12.4),
     m = oo,
     tag = "param_tfhe_2048_ternary_classic_128"
 )
@@ -890,36 +782,9 @@ param_tfhe_2048_gaussian_classic_128 = LWE.Parameters(
     n = 2048,
     q = 2**64,
     Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**9.4),
+    Xe = ND.DiscreteGaussian(2**10.0),
     m = oo,
     tag = "param_tfhe_2048_gaussian_classic_128"
-)
-
-param_tfhe_2048_binary_quantum_128 = LWE.Parameters(
-    n = 2048,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**16.0),
-    m = oo,
-    tag = "param_tfhe_2048_binary_quantum_128"
-)
-
-param_tfhe_2048_ternary_quantum_128 = LWE.Parameters(
-    n = 2048,
-    q = 2**64,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**14.8),
-    m = oo,
-    tag = "param_tfhe_2048_ternary_quantum_128"
-)
-
-param_tfhe_2048_gaussian_quantum_128 = LWE.Parameters(
-    n = 2048,
-    q = 2**64,
-    Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**12.7),
-    m = oo,
-    tag = "param_tfhe_2048_gaussian_quantum_128"
 )
 
 param_tfhe_4096_binary_classic_128 = LWE.Parameters(
@@ -949,88 +814,34 @@ param_tfhe_4096_gaussian_classic_128 = LWE.Parameters(
     tag = "param_tfhe_4096_gaussian_classic_128"
 )
 
-param_tfhe_4096_binary_quantum_128 = LWE.Parameters(
-    n = 4096,
-    q = 2**64,
-    Xs = ND.UniformMod(2),
-    Xe = ND.DiscreteGaussian(2**2.0),
-    m = oo,
-    tag = "param_tfhe_4096_binary_quantum_128"
-)
-
-param_tfhe_4096_ternary_quantum_128 = LWE.Parameters(
-    n = 4096,
-    q = 2**64,
-    Xs = ND.UniformMod(3),
-    Xe = ND.DiscreteGaussian(2**2.0),
-    m = oo,
-    tag = "param_tfhe_4096_ternary_quantum_128"
-)
-
-param_tfhe_4096_gaussian_quantum_128 = LWE.Parameters(
-    n = 4096,
-    q = 2**64,
-    Xs = ND.DiscreteGaussian(4),
-    Xe = ND.DiscreteGaussian(2**2.0),
-    m = oo,
-    tag = "param_tfhe_4096_gaussian_quantum_128"
-)
-
 Table_5_3_a = [
              (param_tfhe_630_binary_classic_128_32, 128, classic_model),
              (param_tfhe_630_ternary_classic_128_32, 128, classic_model),
-             (param_tfhe_630_gaussian_classic_128_32, 128, classic_model),
-             (param_tfhe_630_binary_quantum_128_32, 128, quantum_model),
-             (param_tfhe_630_ternary_quantum_128_32, 128, quantum_model),
-             (param_tfhe_630_gaussian_quantum_128_32, 128, quantum_model),    
+             (param_tfhe_630_gaussian_classic_128_32, 128, classic_model), 
              (param_tfhe_1024_binary_classic_128_32, 128, classic_model),
              (param_tfhe_1024_ternary_classic_128_32, 128, classic_model),
              (param_tfhe_1024_gaussian_classic_128_32, 128, classic_model),
-             (param_tfhe_1024_binary_quantum_128_32, 128, quantum_model),
-             (param_tfhe_1024_ternary_quantum_128_32, 128, quantum_model),
-             (param_tfhe_1024_gaussian_quantum_128_32, 128, quantum_model),  
              (param_tfhe_2048_binary_classic_128_32, 128, classic_model),
              (param_tfhe_2048_ternary_classic_128_32, 128, classic_model),
-             (param_tfhe_2048_gaussian_classic_128_32, 128, classic_model),
-             (param_tfhe_2048_binary_quantum_128_32, 128, quantum_model),
-             (param_tfhe_2048_ternary_quantum_128_32, 128, quantum_model),
-             (param_tfhe_2048_gaussian_quantum_128_32, 128, quantum_model),      
+             (param_tfhe_2048_gaussian_classic_128_32, 128, classic_model),      
              (param_tfhe_630_binary_classic_128, 128, classic_model),
-             (param_tfhe_630_binary_quantum_128, 128, quantum_model),
              (param_tfhe_630_ternary_classic_128, 128, classic_model),
-             (param_tfhe_630_ternary_quantum_128, 128, quantum_model),
              (param_tfhe_630_gaussian_classic_128, 128, classic_model),
-             (param_tfhe_630_gaussian_quantum_128, 128, quantum_model),
              (param_tfhe_750_binary_classic_128, 128, classic_model),
-             (param_tfhe_750_binary_quantum_128, 128, quantum_model),
              (param_tfhe_750_ternary_classic_128, 128, classic_model),
-             (param_tfhe_750_ternary_quantum_128, 128, quantum_model),
              (param_tfhe_750_gaussian_classic_128, 128, classic_model),
-             (param_tfhe_750_gaussian_quantum_128, 128, quantum_model),
              (param_tfhe_870_binary_classic_128, 128, classic_model),
-             (param_tfhe_870_binary_quantum_128, 128, quantum_model),
              (param_tfhe_870_ternary_classic_128, 128, classic_model),
-             (param_tfhe_870_ternary_quantum_128, 128, quantum_model),
              (param_tfhe_870_gaussian_classic_128, 128, classic_model),
-             (param_tfhe_870_gaussian_quantum_128, 128, quantum_model),
              (param_tfhe_1024_binary_classic_128, 128, classic_model),
-             (param_tfhe_1024_binary_quantum_128, 128, quantum_model),
              (param_tfhe_1024_ternary_classic_128, 128, classic_model),
-             (param_tfhe_1024_ternary_quantum_128, 128, quantum_model),
              (param_tfhe_1024_gaussian_classic_128, 128, classic_model),
-             (param_tfhe_1024_gaussian_quantum_128, 128, quantum_model),
              (param_tfhe_2048_binary_classic_128, 128, classic_model),
-             (param_tfhe_2048_binary_quantum_128, 128, quantum_model),
              (param_tfhe_2048_ternary_classic_128, 128, classic_model),
-             (param_tfhe_2048_ternary_quantum_128, 128, quantum_model), 
              (param_tfhe_2048_gaussian_classic_128, 128, classic_model),
-             (param_tfhe_2048_gaussian_quantum_128, 128, quantum_model),
              (param_tfhe_4096_binary_classic_128, 128, classic_model),
-             (param_tfhe_4096_binary_quantum_128, 128, quantum_model),
              (param_tfhe_4096_ternary_classic_128, 128, classic_model),
-             (param_tfhe_4096_ternary_quantum_128, 128, quantum_model),
              (param_tfhe_4096_gaussian_classic_128, 128, classic_model),
-             (param_tfhe_4096_gaussian_quantum_128, 128, quantum_model)]
 
 
 # q = 2**32
