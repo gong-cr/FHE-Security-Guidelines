@@ -12,15 +12,15 @@ MODE_GAUSSIAN = ND.DiscreteGaussian(stddev=3.19, mean=0, n=None)
 #NOTE: sparse-LWE is currently not recommended in the guideline 2/16/2024
 
 error_dist = ND.DiscreteGaussian(stddev=3.19, mean=0, n=None)
+# error_dist = ND.CenteredBinomial(21) central binormial distribution with 42 coins, std = 3.24
 secret_mode = MODE_TERNARY # MODE_TERNARY or MODE_GAUSSIAN
 cost_model_classical = RC.MATZOV
-cost_model_quantum = RC.LaaMosPol14
+cost_model_quantum = RC.ChaLoy21#RC.LaaMosPol14
 m = oo
-# security_margin = 0
 n_list = [2**i for i in range(10, 18)]
 
 # def initial_log_q(n, secret_dist, security_thres, power_setting):
-#     # Define the linear coefficients for each scenario
+#     # Use linear function to compute inital_log_q = slope*dimension + intercept
 #     # Format: (slope, intercept)
 #     coefficients = {
 #         (128, MODE_TERNARY, "classical"): (0.02730, -7.09195),
@@ -45,8 +45,9 @@ n_list = [2**i for i in range(10, 18)]
 #         return round(log_q)
 #     else:
 #         return "Invalid input combination. Please check your inputs and try again."
+
 def initial_log_q(n_dim, secret_dist, security_thres, power_setting):
-    # Check if n_dim is within the valid range
+    # Look-up table to retrieve the initial_log_q
     if n_dim < 1000 or n_dim > 2**17:
         return "Error: Only dimensions between 1000 and 2^17 (131072) are supported."
     
@@ -101,23 +102,31 @@ def initial_log_q(n_dim, secret_dist, security_thres, power_setting):
 
 ESTIMATORS = {
     "classical": {
-        MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
+        MODE_TERNARY: [
+            partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)
                       ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
+                     ,partial(LWE.primal_bdd, red_cost_model=cost_model_classical)
                      ],
-        MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
+        MODE_GAUSSIAN: [
+            partial(LWE.primal_usvp, red_cost_model=cost_model_classical),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_classical)
                       ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_classical)
+                    ,partial(LWE.primal_bdd, red_cost_model=cost_model_classical)
                     ]
     },
     "quantum": {
-        MODE_TERNARY: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
+        MODE_TERNARY: [
+            partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)
                       ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
+                      ,partial(LWE.primal_bdd, red_cost_model=cost_model_quantum)
                       ],
-        MODE_GAUSSIAN: [partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
+        MODE_GAUSSIAN: [
+            partial(LWE.primal_usvp, red_cost_model=cost_model_quantum),
                       partial(LWE.dual_hybrid, red_cost_model=cost_model_quantum)
                       ,partial(LWE.primal_hybrid, mitm=False, babai=False, red_cost_model=cost_model_quantum)
+            ,partial(LWE.primal_bdd, red_cost_model=cost_model_quantum)
                       ]
     }
 }
@@ -131,17 +140,18 @@ def get_estimators_for_mode(secret_mode, power_setting, n_dim):
         filtered_estimators.append(estimator)
     return filtered_estimators
 
-def cost_estimating(estimator, logq, n_dim, secret_dist, error_dist):
-    instance = LWE.Parameters(n=n_dim, q=2**logq, Xs=secret_dist, Xe=error_dist, m=m)
-    if n_dim > 2**14:
-        print("estimator: ", estimator)
-    # start_time = time.time()
-    attack_costs = estimator(params=instance)
-    # end_time = time.time()
-    # elapsed_time = end_time - start_time
-    # print("security = ", log(attack_costs["rop"], 2).n())
-    # print(f"Elapsed time: {elapsed_time} seconds")
-    return log(attack_costs["rop"], 2).n()
+def cost_estimating(estimator, logq, n_dim, secret_dist, error_dist, m = oo):
+    try:
+        instance = LWE.Parameters(n=n_dim, q=2**logq, Xs=secret_dist, Xe=error_dist, m=m)
+        attack_costs = estimator(params=instance)
+        return log(attack_costs["rop"], 2).n()
+    
+    except Exception as e:
+        # Improved error handling with detailed debug information
+        print(f"Error during estimation: {e}")
+        print(f"DEBUG: logq = {logq}, n_dim = {n_dim}, secret_dist = {secret_dist}, error_dist = {error_dist}, m = {m}")
+        print(f"estimator: {estimator}")
+        pass
 
 def binary_search(estimator, n_dim, secret_dist, error_dist, security_target, logq_left, logq_right):
     """
@@ -159,6 +169,7 @@ def binary_search(estimator, n_dim, secret_dist, error_dist, security_target, lo
         else:
             rptr = mid - 1
     assert(cost_estimating(estimator, lptr, n_dim, secret_dist, error_dist)>=security_target)
+    assert(cost_estimating(estimator, lptr+1, n_dim, secret_dist, error_dist)<security_target)
     return lptr  #lptr == rptr
 
 def logq_search_interval(estimator, n_dim, secret_mode, error_dist, security_target, logq_initial, logq_interval=20):
@@ -214,21 +225,35 @@ secret = {MODE_TERNARY: "ternary", MODE_GAUSSIAN: "Gaussian"}
 if __name__ == "__main__":
     security_thres = int(sys.argv[1])
     security_margin = int(sys.argv[2])
+    include_quantum = sys.argv[3].lower() == "true" if len(sys.argv) > 3 else False
 
 security_target = security_thres + security_margin
 print(f"security threshold = {security_thres}, margin = {security_margin}, target = {security_target}")
 
-headers = ["n", "classical ternary", "classical Gaussian", "quantum ternary", "quantum Gaussian"]
+# Define headers conditionally based on whether quantum columns are included
+if include_quantum:
+    headers = ["n", "Classical Ternary", "Classical Gaussian", "Quantum Ternary", "Quantum Gaussian"]
+else:
+    headers = ["n", "Classical Ternary", "Classical Gaussian"]
 
-header_format = "| {:<{}s} | {:<{}s} | {:<{}s} | {:<{}s} | {:<{}s} |".format(
+# Format headers dynamically based on the selected columns
+header_format = "| {:<{}s} | {:<{}s} | {:<{}s} ".format(
     headers[0], 8,
     headers[1], 17,
-    headers[2], 18,
-    headers[3], 15,
-    headers[4], 16
+    headers[2], 18
 )
-separator = "+" + "-" * (10) + "+" + "-" * (19) + "+" + "-" * (20) + "+" + "-" * (17) + "+" + "-" * (18) + "+"
+if include_quantum:
+    header_format += "| {:<{}s} | {:<{}s} |".format(headers[3], 15, headers[4], 16)
+else:
+    header_format += "|"
 
+separator = "+" + "-" * (10) + "+" + "-" * (19) + "+" + "-" * (20)
+if include_quantum:
+    separator += "+" + "-" * (17) + "+" + "-" * (18) + "+"
+    
+border = "-" * (90 if include_quantum else 60)
+
+print(border)
 print(header_format)
 print(separator)
 
@@ -241,7 +266,7 @@ for n_dim in n_list:
     logq_quantum_ternary = []
     logq_quantum_gaussian = []
 
-    for power in ["classical", "quantum"]:
+    for power in ["classical", "quantum"] if include_quantum else ["classical"]:
         for secret_mode in [MODE_TERNARY, MODE_GAUSSIAN]:
             estimators = get_estimators_for_mode(secret_mode, power, n_dim)
             logq = process_maxlogq(estimators, n_dim, secret_mode, error_dist, security_target, power)
@@ -254,13 +279,20 @@ for n_dim in n_list:
             elif power == "quantum" and secret_mode == MODE_GAUSSIAN:
                 logq_quantum_gaussian.append(logq)
 
-    row_format = "| {:<{}} | {:<{}} | {:<{}} | {:<{}} | {:<{}} |".format(
+    row_format = "| {:<{}} | {:<{}} | {:<{}} ".format(
         n_dim, 8,
         logq_classical_ternary[0], 17,
-        logq_classical_gaussian[0], 18,
-        logq_quantum_ternary[0], 15,
-        logq_quantum_gaussian[0], 16
+        logq_classical_gaussian[0], 18
     )
+    
+    if include_quantum:
+        row_format += "| {:<{}} | {:<{}} |".format(
+            logq_quantum_ternary[0], 15,
+            logq_quantum_gaussian[0], 16
+        )
+    else:
+        row_format += "|"
+        
     print(row_format)
     print(separator)
 
