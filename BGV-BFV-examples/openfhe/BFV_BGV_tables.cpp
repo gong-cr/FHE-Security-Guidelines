@@ -65,8 +65,10 @@ int main(int argc, char* argv[]) {
     std::cout << "--------------------COLUMN 3--------------------" << std::endl;
     multDepth        = 18;
     secLevel         = HEStd_256_classic;
-    numDigits        = 3;
-    plaintextModulus = 65537;
+    numDigits        = 4;
+    // finds the plaintext modulus that supports CRT packing for N = 2^{16}
+    NativeInteger modulus = FirstPrime<NativeInteger>(16,1<<17);
+    plaintextModulus = modulus.ConvertToInt();
     scalingModSize   = 60;
     BFVExample(multDepth, secLevel, numDigits, plaintextModulus, scalingModSize);
 
@@ -87,10 +89,12 @@ int main(int argc, char* argv[]) {
     BGVExample(multDepth, secLevel, numDigits, plaintextModulus);
 
     std::cout << "--------------------COLUMN 3--------------------" << std::endl;
-    multDepth        = 16;
+    multDepth        = 15;
     secLevel         = HEStd_256_classic;
-    numDigits        = 3;
-    plaintextModulus = 65537;
+    numDigits        = 4;
+    // uses the plaintext modulus that supports CRT packing for N = 2^{16}
+    plaintextModulus = modulus.ConvertToInt();
+
     BGVExample(multDepth, secLevel, numDigits, plaintextModulus);
 
 }
