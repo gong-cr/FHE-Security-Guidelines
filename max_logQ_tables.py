@@ -148,10 +148,10 @@ def cost_estimating(estimator, logq, n_dim, secret_dist, error_dist, m = oo):
     
     except Exception as e:
         # Improved error handling with detailed debug information
-        print(f"Error during estimation: {e}")
-        print(f"DEBUG: logq = {logq}, n_dim = {n_dim}, secret_dist = {secret_dist}, error_dist = {error_dist}, m = {m}")
-        print(f"estimator: {estimator}")
-        pass
+        # print(f"Error during estimation: {e}")
+        # print(f"DEBUG: logq = {logq}, n_dim = {n_dim}, secret_dist = {secret_dist}, error_dist = {error_dist}, m = {m}")
+        # print(f"estimator: {estimator}")
+        return None
 
 def binary_search(estimator, n_dim, secret_dist, error_dist, security_target, logq_left, logq_right):
     """
@@ -213,10 +213,17 @@ def maxlogq_finder(estimator, n_dim, secret_dist, error_dist, security_target, p
 def process_maxlogq(estimators, n_dim, secret_dist, error_dist, security_target, power_setting):
     logq_list = []
     for est in estimators:
-        # print(f"DEBUG: {est}")
-        logq = maxlogq_finder(est, n_dim, secret_dist, error_dist, security_target, power_setting)
-        logq_list.append(logq)
-    # print(f"security target ={security_target}")
+        try:
+            logq = maxlogq_finder(est, n_dim, secret_dist, error_dist, security_target, power_setting)
+            # print(f"DEBUG:{n_dim}, {est}")
+            logq_list.append(logq)
+        except Exception as e:
+            # print(f"Error encountered with estimator {est.func.__name__} at n_dim={n_dim}: {e}")
+            continue
+    if not logq_list:
+        # Handle the case where all estimators fail
+        raise RuntimeError(f"All estimators failed for n_dim={n_dim}. Unable to compute logq.")
+    
     # print(f"DEBUG: maxlogq list = {logq_list}")
     return min(logq_list)
 
@@ -247,11 +254,11 @@ if include_quantum:
 else:
     header_format += "|"
 
-separator = "+" + "-" * (10) + "+" + "-" * (19) + "+" + "-" * (20)
+separator = "+" + "-" * (10) + "+" + "-" * (19) + "+" + "-" * (20) + "+"
 if include_quantum:
     separator += "+" + "-" * (17) + "+" + "-" * (18) + "+"
     
-border = "-" * (90 if include_quantum else 60)
+border = "-" * (90 if include_quantum else 53)
 
 print(border)
 print(header_format)
