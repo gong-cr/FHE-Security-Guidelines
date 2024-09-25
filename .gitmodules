@@ -7,3 +7,6 @@
 [submodule "concrete"]
 	path = concrete
 	url = git@github.com:zama-ai/concrete
+[submodule "BGV-BFV-examples/seal"]
+	path = BGV-BFV-examples/seal
+	url = https://github.com/WeiDaiWD/SEAL-Depth-Estimator.git
