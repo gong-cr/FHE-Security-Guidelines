@@ -3,10 +3,10 @@
 	url = https://github.com/malb/lattice-estimator.git
 [submodule "TFHE-examples/concrete"]
 	path = TFHE-examples/concrete
-	url = git@github.com:zama-ai/concrete
+	url = https://github.com/zama-ai/concrete.git
 [submodule "concrete"]
 	path = concrete
-	url = git@github.com:zama-ai/concrete
+	url = https://github.com/zama-ai/concrete.git
 [submodule "BGV-BFV-examples/seal"]
 	path = BGV-BFV-examples/seal
 	url = https://github.com/WeiDaiWD/SEAL-Depth-Estimator.git
